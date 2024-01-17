@@ -1,4 +1,4 @@
-package com.example.composestarter.utils
+package com.app.coins.utils
 
 import android.content.res.Configuration
 import androidx.compose.animation.core.Animatable
