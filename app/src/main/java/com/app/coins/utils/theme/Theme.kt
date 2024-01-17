@@ -1,4 +1,4 @@
-package com.app.coins.ui.theme
+package com.app.coins.utils.theme
 
 import android.app.Activity
 import android.os.Build
