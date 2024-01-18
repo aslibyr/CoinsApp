@@ -12,8 +12,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.rememberNavController
+import com.app.coins.custom.bottom_bar.BottomBar
 import com.app.coins.custom.navigation.MainNavigation
-import com.app.coins.custom.navigation.bottom_bar.BottomBar
 import com.app.coins.utils.theme.CoinsTheme
 import dagger.hilt.android.AndroidEntryPoint
 

@@ -1,4 +1,4 @@
-package com.app.coins.custom.navigation.bottom_bar
+package com.app.coins.custom.bottom_bar
 
 import androidx.compose.foundation.interaction.Interaction
 import androidx.compose.foundation.interaction.MutableInteractionSource
