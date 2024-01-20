@@ -19,6 +19,9 @@ class HomeScreenViewModel @Inject constructor(private val useCase: GetCoinsUseCa
         MutableStateFlow(value = PagingData.empty())
     val coinsState: MutableStateFlow<PagingData<CryptoResponse>> get() = _coinsState
 
+    init {
+        getCoins()
+    }
     private fun getCoins(query: String = "") {
         viewModelScope.launch {
             useCase.invoke(query).distinctUntilChanged().cachedIn(viewModelScope).collect {

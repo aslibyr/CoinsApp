@@ -14,10 +14,10 @@ data class CryptoResponse(
 	val priceChange1w: Double? = null,
 
 	@Json(name = "availableSupply")
-	val availableSupply: Int? = null,
+	val availableSupply: Double? = null,
 
 	@Json(name = "totalSupply")
-	val totalSupply: Int? = null,
+	val totalSupply: Double? = null,
 
 	@Json(name = "twitterUrl")
 	val twitterUrl: String? = null,
@@ -29,7 +29,7 @@ data class CryptoResponse(
 	val priceChange1h: Double? = null,
 
 	@Json(name = "priceBtc")
-	val priceBtc: Int? = null,
+	val priceBtc: Double? = null,
 
 	@Json(name = "volume")
 	val volume: Double? = null,
