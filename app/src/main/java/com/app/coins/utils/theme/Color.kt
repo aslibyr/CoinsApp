@@ -3,8 +3,8 @@ package com.app.coins.utils.theme
 import androidx.compose.ui.graphics.Color
 
 
-val light = Color(0xE89BB7C5)
-val textColor = Color(0xFFf8f4c4)
+val light = Color(0xFFc4d6dd)
+val textColor = Color(0xFFf3f7f8)
 
 val secondaryBackgroundColor = Color(0xFF47667b)
 val primaryBackgroundColor = Color(0xFF9bb7c5)
