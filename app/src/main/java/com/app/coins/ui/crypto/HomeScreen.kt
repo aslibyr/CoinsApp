@@ -2,8 +2,8 @@ package com.app.coins.ui.crypto
 
 import android.content.res.Configuration.ORIENTATION_LANDSCAPE
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -18,7 +18,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -39,14 +38,17 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import com.app.coins.R
+import com.app.coins.custom.loading.LoadingDialog
 import com.app.coins.custom.textfield.CustomOutlinedTextField
 import com.app.coins.data.model.CryptoResponse
+import com.app.coins.utils.ScreenRoutes
 import com.app.coins.utils.theme.primaryBackgroundColor
 import com.app.coins.utils.theme.secondaryBackgroundColor
 
 @Composable
 fun HomeScreen(
     viewModel: HomeScreenViewModel = hiltViewModel(),
+    cryptoClicked: (String) -> Unit
 ) {
     val coinsPagingItems: LazyPagingItems<CryptoResponse> =
         viewModel.coinsState.collectAsLazyPagingItems()
@@ -91,19 +93,22 @@ fun HomeScreen(
         ) {
             items(coinsPagingItems.itemCount) { index ->
 
-                coinsPagingItems[index]?.let { CryptoListItem(coin = it) }
+                coinsPagingItems[index]?.let {
+                    CryptoListItem(coin = it, onItemClick = {
+                        val route = ScreenRoutes.CRYPTO_DETAIL_SCREEN_ROUTE.replace(
+                            oldValue = "{id}",
+                            newValue = it.id.toString()
+                        )
+                        cryptoClicked(route)
+                    })
+                }
             }
         }
 
         coinsPagingItems.apply {
             when {
                 loadState.refresh is LoadState.Loading -> {
-
-                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-
-                        CircularProgressIndicator()
-
-                    }
+                    LoadingDialog()
                 }
 
                 loadState.refresh is LoadState.Error -> {
@@ -112,11 +117,7 @@ fun HomeScreen(
                 }
 
                 loadState.append is LoadState.Loading -> {
-
-                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-
-                        CircularProgressIndicator()
-                    }
+                    LoadingDialog()
                 }
 
                 loadState.append is LoadState.Error -> {
@@ -131,11 +132,14 @@ fun HomeScreen(
 }
 
 @Composable
-fun CryptoListItem(coin: CryptoResponse) {
+fun CryptoListItem(coin: CryptoResponse, onItemClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(60.dp),
+            .height(60.dp)
+            .clickable {
+                onItemClick()
+            },
         elevation = CardDefaults.cardElevation(6.dp)
     ) {
         Row(
@@ -156,7 +160,6 @@ fun CryptoListItem(coin: CryptoResponse) {
                 ),
                 error = painterResource(id = R.drawable.ic_launcher_background)
             )
-
             coin.name?.let { Text(text = it) }
         }
 

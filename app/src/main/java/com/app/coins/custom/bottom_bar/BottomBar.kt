@@ -65,7 +65,7 @@ fun BottomBar(
         BottomNavigationItem(
             title = "Crypto",
             icon = Icons.Outlined.MonetizationOn,
-            route = ScreenRoutes.HOME_SCREEN_ROUTE
+            route = ScreenRoutes.CRYPTO_HOST_ROUTE
         ),
         BottomNavigationItem(
             title = "NFT's",

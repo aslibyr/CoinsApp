@@ -6,7 +6,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.app.coins.ui.crypto.HomeScreen
+import com.app.coins.custom.navigation.graphs.cryptoGraph
 import com.app.coins.ui.more.MoreScreen
 import com.app.coins.ui.nft.NftScreen
 import com.app.coins.utils.ScreenRoutes
@@ -19,16 +19,12 @@ fun MainNavigation(
 
     NavHost(
         navController = navController,
-        startDestination = ScreenRoutes.HOME_SCREEN_ROUTE,
+        startDestination = ScreenRoutes.CRYPTO_HOST_ROUTE,
         modifier = Modifier,
 
         ) {
-        composable(
-            route = ScreenRoutes.HOME_SCREEN_ROUTE
-        ) {
-            HomeScreen()
+        cryptoGraph(navController, shouldBottomBarVisible = {})
 
-        }
         composable(
             route = ScreenRoutes.NFT_SCREEN_ROUTE
         ) {
