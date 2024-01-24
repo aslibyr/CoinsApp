@@ -47,7 +47,7 @@ import com.app.coins.utils.theme.secondaryBackgroundColor
 
 @Composable
 fun HomeScreen(
-    viewModel: HomeScreenViewModel = hiltViewModel(),
+    viewModel: CryptoScreenViewModel = hiltViewModel(),
     cryptoClicked: (String) -> Unit
 ) {
     val coinsPagingItems: LazyPagingItems<CryptoResponse> =

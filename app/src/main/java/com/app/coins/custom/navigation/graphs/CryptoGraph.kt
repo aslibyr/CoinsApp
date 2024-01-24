@@ -15,11 +15,11 @@ fun NavGraphBuilder.cryptoGraph(
     shouldBottomBarVisible: (Boolean) -> Unit
 ) {
     navigation(
-        startDestination = ScreenRoutes.HOME_SCREEN_ROUTE,
+        startDestination = ScreenRoutes.CRYPTO_SCREEN_ROUTE,
         route = ScreenRoutes.CRYPTO_HOST_ROUTE
     ) {
         composable(
-            route = ScreenRoutes.HOME_SCREEN_ROUTE
+            route = ScreenRoutes.CRYPTO_SCREEN_ROUTE
         ) {
             HomeScreen(cryptoClicked = { route ->
                 navController.navigate(route)

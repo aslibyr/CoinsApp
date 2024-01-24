@@ -13,7 +13,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeScreenViewModel @Inject constructor(private val useCase: GetCoinsUseCase) : ViewModel() {
+class CryptoScreenViewModel @Inject constructor(private val useCase: GetCoinsUseCase) :
+    ViewModel() {
 
     private val _coinsState: MutableStateFlow<PagingData<CryptoResponse>> =
         MutableStateFlow(value = PagingData.empty())
@@ -22,6 +23,7 @@ class HomeScreenViewModel @Inject constructor(private val useCase: GetCoinsUseCa
     init {
         getCoins()
     }
+
     private fun getCoins(query: String = "") {
         viewModelScope.launch {
             useCase.invoke(query).distinctUntilChanged().cachedIn(viewModelScope).collect {

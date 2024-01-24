@@ -13,7 +13,10 @@ import com.app.coins.utils.theme.primaryBackgroundColor
 import com.app.coins.utils.theme.secondaryBackgroundColor
 
 @Composable
-fun DetailScreen(viewModel: DetailScreenViewModel = hiltViewModel(), onBackClick: () -> Unit) {
+fun DetailScreen(
+    viewModel: CryptoDetailScreenViewModel = hiltViewModel(),
+    onBackClick: () -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
