@@ -2,14 +2,23 @@ package com.app.coins.utils.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.font.toFontFamily
 import androidx.compose.ui.unit.sp
+import com.app.coins.R
 
+class FontType {
+    companion object {
+        val quicksandLight = Font(R.font.quicksand_light, FontWeight.Bold).toFontFamily()
+        val quicksandMedium = Font(R.font.quicksand_medium, FontWeight.Light).toFontFamily()
+        val quicksandBold = Font(R.font.quicksand_bold, FontWeight.ExtraBold).toFontFamily()
+    }
+}
 // Set of Material typography styles to start with
 val Typography = Typography(
     bodyLarge = TextStyle(
-        fontFamily = FontFamily.Default,
+        fontFamily = FontType.quicksandMedium,
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp,
         lineHeight = 24.sp,

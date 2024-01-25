@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -42,6 +43,7 @@ import com.app.coins.custom.loading.LoadingDialog
 import com.app.coins.custom.textfield.CustomOutlinedTextField
 import com.app.coins.data.model.CryptoResponse
 import com.app.coins.utils.ScreenRoutes
+import com.app.coins.utils.theme.light
 import com.app.coins.utils.theme.primaryBackgroundColor
 import com.app.coins.utils.theme.secondaryBackgroundColor
 
@@ -135,6 +137,7 @@ fun HomeScreen(
 fun CryptoListItem(coin: CryptoResponse, onItemClick: () -> Unit) {
     Card(
         modifier = Modifier
+            .clip(RoundedCornerShape(30.dp))
             .fillMaxWidth()
             .height(60.dp)
             .clickable {
@@ -145,6 +148,7 @@ fun CryptoListItem(coin: CryptoResponse, onItemClick: () -> Unit) {
         Row(
             modifier = Modifier
                 .fillMaxSize()
+                .background(color = light)
                 .padding(start = 8.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp),
