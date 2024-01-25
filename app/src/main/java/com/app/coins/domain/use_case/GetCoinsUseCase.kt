@@ -1,4 +1,4 @@
-package com.app.coins.domain
+package com.app.coins.domain.use_case
 
 import androidx.paging.PagingData
 import com.app.coins.data.model.CryptoResponse
