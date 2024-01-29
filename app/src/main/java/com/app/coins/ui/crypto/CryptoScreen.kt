@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -43,7 +44,6 @@ import coil.compose.AsyncImage
 import com.app.coins.R
 import com.app.coins.custom.loading.LoadingDialog
 import com.app.coins.custom.textfield.CustomOutlinedTextField
-import com.app.coins.data.model.CryptoResponse
 import com.app.coins.domain.model.CryptoUIModel
 import com.app.coins.utils.ScreenRoutes
 import com.app.coins.utils.theme.FontType
@@ -160,7 +160,8 @@ fun CryptoListItem(coin: CryptoUIModel, onItemClick: () -> Unit) {
             AsyncImage(
                 modifier = Modifier
                     .size(40.dp)
-                    .clip(CircleShape),
+                    .clip(CircleShape)
+                    .weight(1f),
                 model = coin.icon,
                 contentDescription = "",
                 placeholder = painterResource(
@@ -168,8 +169,22 @@ fun CryptoListItem(coin: CryptoUIModel, onItemClick: () -> Unit) {
                 ),
                 error = painterResource(id = R.drawable.ic_launcher_background)
             )
-            coin.name?.let { Text(text = it) }
+            coin.name?.let {
+                Text(
+                    text = it,
+                    modifier = Modifier.weight(2f)
+                )
+            }
+            coin.priceChange1d?.let {
+                Spacer(modifier = Modifier.weight(1f))
+                Text(
+                    text = "%${it}",
+                    fontSize = 16.sp,
+                    fontFamily = FontType.quicksandBold,
+                    color = if (it.contains("-")) Color.Red else Color.Green,
+                    modifier = Modifier.padding(end = 16.dp)
+                )
+            }
         }
-
     }
 }
