@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -24,6 +25,7 @@ import com.app.coins.R
 import com.app.coins.custom.loading.LoadingDialog
 import com.app.coins.custom.top_bar.TopBarComponentUIModel
 import com.app.coins.custom.top_bar.TopBarView
+import com.app.coins.data.model.ChartsResponse
 import com.app.coins.domain.Empty
 import com.app.coins.domain.GenericError
 import com.app.coins.domain.Loading
@@ -33,6 +35,7 @@ import com.app.coins.utils.theme.FontType
 import com.app.coins.utils.theme.light
 import com.app.coins.utils.theme.primaryBackgroundColor
 import com.app.coins.utils.theme.secondaryBackgroundColor
+import java.util.Date
 
 @Composable
 fun DetailScreen(
@@ -41,7 +44,7 @@ fun DetailScreen(
 ) {
 
     val coinDetail by viewModel.coinDetailState.collectAsStateWithLifecycle()
-
+    val coinCharts by viewModel.coinChartsState.collectAsStateWithLifecycle()
 
     Column(
         modifier = Modifier
@@ -135,6 +138,7 @@ fun StateLessCryptoDetail(
                 )
             }
         }
+
     }
 }
 

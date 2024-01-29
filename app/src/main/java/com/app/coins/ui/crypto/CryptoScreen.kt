@@ -29,10 +29,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
@@ -42,7 +44,9 @@ import com.app.coins.R
 import com.app.coins.custom.loading.LoadingDialog
 import com.app.coins.custom.textfield.CustomOutlinedTextField
 import com.app.coins.data.model.CryptoResponse
+import com.app.coins.domain.model.CryptoUIModel
 import com.app.coins.utils.ScreenRoutes
+import com.app.coins.utils.theme.FontType
 import com.app.coins.utils.theme.light
 import com.app.coins.utils.theme.primaryBackgroundColor
 import com.app.coins.utils.theme.secondaryBackgroundColor
@@ -52,7 +56,7 @@ fun HomeScreen(
     viewModel: CryptoScreenViewModel = hiltViewModel(),
     cryptoClicked: (String) -> Unit
 ) {
-    val coinsPagingItems: LazyPagingItems<CryptoResponse> =
+    val coinsPagingItems: LazyPagingItems<CryptoUIModel> =
         viewModel.coinsState.collectAsLazyPagingItems()
 
     var queryText by rememberSaveable {
@@ -134,7 +138,7 @@ fun HomeScreen(
 }
 
 @Composable
-fun CryptoListItem(coin: CryptoResponse, onItemClick: () -> Unit) {
+fun CryptoListItem(coin: CryptoUIModel, onItemClick: () -> Unit) {
     Card(
         modifier = Modifier
             .clip(RoundedCornerShape(30.dp))

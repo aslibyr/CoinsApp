@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.app.coins.data.model.CryptoResponse
+import com.app.coins.domain.model.CryptoUIModel
 import com.app.coins.domain.use_case.GetCoinsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,9 +17,9 @@ import javax.inject.Inject
 class CryptoScreenViewModel @Inject constructor(private val useCase: GetCoinsUseCase) :
     ViewModel() {
 
-    private val _coinsState: MutableStateFlow<PagingData<CryptoResponse>> =
+    private val _coinsState: MutableStateFlow<PagingData<CryptoUIModel>> =
         MutableStateFlow(value = PagingData.empty())
-    val coinsState: MutableStateFlow<PagingData<CryptoResponse>> get() = _coinsState
+    val coinsState: MutableStateFlow<PagingData<CryptoUIModel>> get() = _coinsState
 
     init {
         getCoins()

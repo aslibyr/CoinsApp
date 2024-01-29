@@ -1,6 +1,7 @@
 package com.app.coins.data.remote.webservice
 
 import com.app.coins.data.model.BasePagingResponse
+import com.app.coins.data.model.ChartsResponse
 import com.app.coins.data.model.CryptoResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -18,5 +19,9 @@ interface WebService {
 
     @GET("coins/{coinId}")
     suspend fun getCoinDetail(@Path("coinId") coinId : String) : CryptoResponse
+
+
+    @GET("coins/{coinId}/charts")
+    suspend fun getCoinCharts(@Path("coinId") coinId : String,@Query("period") period : String = "24h") : List<ChartsResponse>
 
 }

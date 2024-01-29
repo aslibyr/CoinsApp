@@ -3,9 +3,11 @@ package com.app.coins.ui.crypto.detail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.app.coins.data.model.ChartsResponse
 import com.app.coins.domain.BaseUIModel
 import com.app.coins.domain.Loading
 import com.app.coins.domain.model.CryptoUIModel
+import com.app.coins.domain.use_case.GetCoinChartsUseCase
 import com.app.coins.domain.use_case.GetCoinDetailUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -20,6 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CryptoDetailScreenViewModel @Inject constructor(
     private val coinDetailUseCase: GetCoinDetailUseCase,
+    private val coinChartsUseCase: GetCoinChartsUseCase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -32,13 +35,29 @@ class CryptoDetailScreenViewModel @Inject constructor(
             SharingStarted.Eagerly,
             Loading()
         )
+
+    private val _coinChartsState = MutableStateFlow<BaseUIModel<List<ChartsResponse>>>(Loading())
+    val coinChartsState: StateFlow<BaseUIModel<List<ChartsResponse>>>
+        get() = _coinChartsState.stateIn(
+            viewModelScope,
+            SharingStarted.Eagerly,
+            Loading()
+        )
     init {
         getCoinDetail(coinId)
+        getCoinCharts(coinId)
     }
     private fun getCoinDetail(coinId:String) {
         viewModelScope.launch(Dispatchers.IO) {
             coinDetailUseCase.invoke(coinId).collect { coinDetailState ->
                 _coinDetailState.emit(coinDetailState)
+            }
+        }
+    }
+    private fun getCoinCharts(coinId:String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            coinChartsUseCase.invoke(coinId).collect { coinDetailState ->
+                _coinChartsState.emit(coinDetailState)
             }
         }
     }
