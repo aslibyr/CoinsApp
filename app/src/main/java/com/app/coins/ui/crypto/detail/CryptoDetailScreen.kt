@@ -14,7 +14,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -25,17 +24,17 @@ import com.app.coins.R
 import com.app.coins.custom.loading.LoadingDialog
 import com.app.coins.custom.top_bar.TopBarComponentUIModel
 import com.app.coins.custom.top_bar.TopBarView
-import com.app.coins.data.model.ChartsResponse
 import com.app.coins.domain.Empty
 import com.app.coins.domain.GenericError
 import com.app.coins.domain.Loading
 import com.app.coins.domain.Success
 import com.app.coins.domain.model.CryptoUIModel
+import com.app.coins.utils.PriceFormatterUtil
 import com.app.coins.utils.theme.FontType
+import com.app.coins.utils.theme.darkTextColor
 import com.app.coins.utils.theme.light
 import com.app.coins.utils.theme.primaryBackgroundColor
 import com.app.coins.utils.theme.secondaryBackgroundColor
-import java.util.Date
 
 @Composable
 fun DetailScreen(
@@ -108,6 +107,7 @@ fun StateLessCryptoDetail(
         crypto.name?.let {
             Text(
                 text = it,
+                color = light,
                 fontSize = 18.sp,
                 fontFamily = FontType.quicksandBold
             )
@@ -115,6 +115,7 @@ fun StateLessCryptoDetail(
         crypto.symbol?.let {
             Text(
                 text = it,
+                color = light,
                 fontSize = 12.sp,
                 fontFamily = FontType.quicksandLight
             )
@@ -129,16 +130,19 @@ fun StateLessCryptoDetail(
                     light
                 )
         ) {
-            crypto.price?.let {
+            crypto.price?.let { price ->
+                val formattedPrice = PriceFormatterUtil.formatPrice(price)
                 Text(
-                    modifier = Modifier.padding(start = 24.dp),
-                    text = it,
-                    fontSize = 20.sp,
-                    fontFamily = FontType.quicksandBold
+                    modifier = Modifier
+                        .padding(start = 30.dp)
+                        .align(Alignment.CenterHorizontally),
+                    text = "$formattedPrice $ ",
+                    fontSize = 24.sp,
+                    fontFamily = FontType.quicksandBold,
+                    color = darkTextColor
                 )
             }
         }
-
     }
 }
 

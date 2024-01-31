@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.icu.text.DecimalFormat
 import android.net.Uri
 import android.os.Build
 import android.os.VibrationEffect
@@ -71,4 +72,29 @@ internal fun Context.findActivity(): Activity {
     throw IllegalStateException("Permissions should be called in the context of an Activity")
 }
 
+fun formatPrice(price: Double): String {
+    val dec = DecimalFormat("#,###.##")
+    return dec.format(price)
+}
 
+object PriceFormatterUtil {
+    fun formatPrice(price: String): String {
+        val priceAsDouble = price.toDoubleOrNull()
+
+        return if (priceAsDouble != null && priceAsDouble < 1.0) {
+            withZeroFormatPrice(price)
+        } else {
+            standardFormatPrice(price)
+        }
+    }
+
+    private fun standardFormatPrice(price: String): String {
+        val dec = DecimalFormat("#,###.##")
+        return dec.format(price.toDouble())
+    }
+
+    private fun withZeroFormatPrice(price: String): String {
+        val dec = DecimalFormat("0.####")
+        return dec.format(price.toDouble())
+    }
+}

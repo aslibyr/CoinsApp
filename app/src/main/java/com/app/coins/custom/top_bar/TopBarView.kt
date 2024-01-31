@@ -25,6 +25,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.app.coins.utils.theme.darkTextColor
 
 
 @Composable
@@ -59,7 +60,7 @@ fun TopBarView(
                             onBackClick()
                         }
                         .height(IntrinsicSize.Min),
-                    tint = Color.Black
+                    tint = darkTextColor
 
                 )
             }

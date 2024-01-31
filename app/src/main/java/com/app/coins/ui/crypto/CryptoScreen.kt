@@ -7,12 +7,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.shape.CircleShape
@@ -45,8 +46,10 @@ import com.app.coins.R
 import com.app.coins.custom.loading.LoadingDialog
 import com.app.coins.custom.textfield.CustomOutlinedTextField
 import com.app.coins.domain.model.CryptoUIModel
+import com.app.coins.utils.PriceFormatterUtil
 import com.app.coins.utils.ScreenRoutes
 import com.app.coins.utils.theme.FontType
+import com.app.coins.utils.theme.darkTextColor
 import com.app.coins.utils.theme.light
 import com.app.coins.utils.theme.primaryBackgroundColor
 import com.app.coins.utils.theme.secondaryBackgroundColor
@@ -172,18 +175,36 @@ fun CryptoListItem(coin: CryptoUIModel, onItemClick: () -> Unit) {
             coin.name?.let {
                 Text(
                     text = it,
-                    modifier = Modifier.weight(2f)
+                    color = darkTextColor,
+                    modifier = Modifier.weight(3f)
                 )
             }
-            coin.priceChange1d?.let {
-                Spacer(modifier = Modifier.weight(1f))
-                Text(
-                    text = "%${it}",
-                    fontSize = 16.sp,
-                    fontFamily = FontType.quicksandBold,
-                    color = if (it.contains("-")) Color.Red else Color.Green,
-                    modifier = Modifier.padding(end = 16.dp)
-                )
+            Column(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .width(100.dp),
+                horizontalAlignment = Alignment.Start
+            ) {
+                coin.priceChange1d?.let {
+                    Text(
+                        text = "%${it}",
+                        fontSize = 14.sp,
+                        fontFamily = FontType.quicksandMedium,
+                        color = if (it.contains("-")) Color.Red else Color.Green,
+                        modifier = Modifier.padding(end = 8.dp, top = 8.dp, bottom = 2.dp)
+                    )
+                }
+
+                coin.price?.let { price ->
+                    val formattedPrice = PriceFormatterUtil.formatPrice(price)
+                    Text(
+                        text = "$formattedPrice $ ",
+                        fontSize = 14.sp,
+                        fontFamily = FontType.quicksandLight,
+                        color = darkTextColor,
+                        modifier = Modifier.padding(end = 8.dp)
+                    )
+                }
             }
         }
     }
