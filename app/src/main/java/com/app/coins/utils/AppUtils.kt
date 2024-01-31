@@ -72,11 +72,6 @@ internal fun Context.findActivity(): Activity {
     throw IllegalStateException("Permissions should be called in the context of an Activity")
 }
 
-fun formatPrice(price: Double): String {
-    val dec = DecimalFormat("#,###.##")
-    return dec.format(price)
-}
-
 object PriceFormatterUtil {
     fun formatPrice(price: String): String {
         val priceAsDouble = price.toDoubleOrNull()

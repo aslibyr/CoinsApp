@@ -6,7 +6,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
-import com.app.coins.ui.crypto.HomeScreen
+import com.app.coins.ui.crypto.CryptoScreen
 import com.app.coins.ui.crypto.detail.DetailScreen
 import com.app.coins.utils.ScreenRoutes
 
@@ -21,7 +21,7 @@ fun NavGraphBuilder.cryptoGraph(
         composable(
             route = ScreenRoutes.CRYPTO_SCREEN_ROUTE
         ) {
-            HomeScreen(cryptoClicked = { route ->
+            CryptoScreen(cryptoClicked = { route ->
                 navController.navigate(route)
             })
 

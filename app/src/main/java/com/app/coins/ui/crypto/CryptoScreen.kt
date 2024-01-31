@@ -1,9 +1,11 @@
 package com.app.coins.ui.crypto
 
 import android.content.res.Configuration.ORIENTATION_LANDSCAPE
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -15,18 +17,21 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,7 +39,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -43,8 +47,8 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import com.app.coins.R
+import com.app.coins.custom.buttons.ListResetButton
 import com.app.coins.custom.loading.LoadingDialog
-import com.app.coins.custom.textfield.CustomOutlinedTextField
 import com.app.coins.domain.model.CryptoUIModel
 import com.app.coins.utils.PriceFormatterUtil
 import com.app.coins.utils.ScreenRoutes
@@ -53,9 +57,11 @@ import com.app.coins.utils.theme.darkTextColor
 import com.app.coins.utils.theme.light
 import com.app.coins.utils.theme.primaryBackgroundColor
 import com.app.coins.utils.theme.secondaryBackgroundColor
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @Composable
-fun HomeScreen(
+fun CryptoScreen(
     viewModel: CryptoScreenViewModel = hiltViewModel(),
     cryptoClicked: (String) -> Unit
 ) {
@@ -69,7 +75,23 @@ fun HomeScreen(
         StaggeredGridCells.Adaptive(minSize = 175.dp)
     } else StaggeredGridCells.Fixed(2)
 
-    Column(
+    val listState = rememberLazyListState()
+    val scope = rememberCoroutineScope()
+    var isScrollButtonVisible by rememberSaveable {
+        mutableStateOf(false)
+    }
+
+    LaunchedEffect(listState) {
+        snapshotFlow { listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index }
+            .collectLatest {
+                if (it != null && isScrollButtonVisible != listState.firstVisibleItemIndex > 0) {
+                    isScrollButtonVisible = listState.firstVisibleItemIndex > 0
+                }
+            }
+    }
+
+
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .background(
@@ -80,19 +102,6 @@ fun HomeScreen(
                 )
             )
     ) {
-
-        CustomOutlinedTextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            label = "Ara",
-            text = queryText,
-            returnText = {
-                queryText = it
-            },
-            onImeClicked = { },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
-        )
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize(),
@@ -110,6 +119,14 @@ fun HomeScreen(
                         )
                         cryptoClicked(route)
                     })
+                }
+            }
+        }
+        AnimatedVisibility(visible = isScrollButtonVisible) {
+            ListResetButton {
+                scope.launch {
+                    isScrollButtonVisible = false
+                    listState.animateScrollToItem(0)
                 }
             }
         }
@@ -139,6 +156,7 @@ fun HomeScreen(
         }
     }
 }
+
 
 @Composable
 fun CryptoListItem(coin: CryptoUIModel, onItemClick: () -> Unit) {
