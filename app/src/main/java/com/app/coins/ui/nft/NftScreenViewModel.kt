@@ -24,7 +24,7 @@ class NftScreenViewModel @Inject constructor(private val webService: WebService)
         getNfts()
     }
 
-    fun getNfts() {
+    private fun getNfts() {
         viewModelScope.launch {
             when (val response = safeApiCall(Dispatchers.IO) { webService.getNfts() }) {
                 is ResultWrapper.GenericError -> {

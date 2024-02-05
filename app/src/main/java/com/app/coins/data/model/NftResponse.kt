@@ -32,7 +32,7 @@ data class DataItem(
 	val thirtyDayVolume: Double? = null,
 
 	@Json(name = "creatorFee")
-	val creatorFee: Int? = null,
+	val creatorFee: Double? = null,
 
 	@Json(name = "floorPriceChange7d")
 	val floorPriceChange7d: Double? = null,
@@ -161,10 +161,10 @@ data class DataItem(
 	val oneDayChange: Double? = null,
 
 	@Json(name = "volumeChange7d")
-	val volumeChange7d: Int? = null,
+	val volumeChange7d: Double? = null,
 
 	@Json(name = "ownersCountChange24h")
-	val ownersCountChange24h: Int? = null,
+	val ownersCountChange24h: Double? = null,
 
 	@Json(name = "ownersCount")
 	val ownersCount: Int? = null,
