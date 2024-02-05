@@ -17,7 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class NftScreenViewModel @Inject constructor(private val webService: WebService) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(NftUIModel(nftData = null))
+    private val _uiState = MutableStateFlow(NftUIStateModel(nftData = null))
     val uiState = _uiState.asStateFlow()
 
     init {
@@ -58,7 +58,7 @@ class NftScreenViewModel @Inject constructor(private val webService: WebService)
     }
 }
 
-data class NftUIModel(
+data class NftUIStateModel(
     val nftData: NftResponse?,
     val isLoading: Boolean = false,
     val errorMessage: String = "",
