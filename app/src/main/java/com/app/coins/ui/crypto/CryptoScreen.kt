@@ -1,7 +1,6 @@
 package com.app.coins.ui.crypto
 
 import android.content.res.Configuration.ORIENTATION_LANDSCAPE
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -107,7 +106,8 @@ fun CryptoScreen(
                 .fillMaxSize(),
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            state = listState
         ) {
             items(coinsPagingItems.itemCount) { index ->
 
@@ -122,14 +122,22 @@ fun CryptoScreen(
                 }
             }
         }
-        AnimatedVisibility(visible = isScrollButtonVisible) {
-            ListResetButton {
-                scope.launch {
-                    isScrollButtonVisible = false
-                    listState.animateScrollToItem(0)
+        if (isScrollButtonVisible) {
+            Box(
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(bottom = 100.dp)
+            ) {
+                ListResetButton {
+                    scope.launch {
+                        isScrollButtonVisible = false
+                        listState.animateScrollToItem(0)
+                    }
                 }
             }
         }
+
+
 
         coinsPagingItems.apply {
             when {
