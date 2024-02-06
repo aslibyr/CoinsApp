@@ -9,3 +9,5 @@ val darkTextColor = Color(0xFF313d48)
 
 val secondaryBackgroundColor = Color(0xFF47667b)
 val primaryBackgroundColor = Color(0xFF9bb7c5)
+
+val green = Color(0xFF199906)

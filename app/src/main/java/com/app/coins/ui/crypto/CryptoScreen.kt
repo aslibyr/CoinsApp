@@ -53,6 +53,7 @@ import com.app.coins.utils.PriceFormatterUtil
 import com.app.coins.utils.ScreenRoutes
 import com.app.coins.utils.theme.FontType
 import com.app.coins.utils.theme.darkTextColor
+import com.app.coins.utils.theme.green
 import com.app.coins.utils.theme.light
 import com.app.coins.utils.theme.primaryBackgroundColor
 import com.app.coins.utils.theme.secondaryBackgroundColor
@@ -216,7 +217,7 @@ fun CryptoListItem(coin: CryptoUIModel, onItemClick: () -> Unit) {
                         text = "%${it}",
                         fontSize = 14.sp,
                         fontFamily = FontType.quicksandMedium,
-                        color = if (it.contains("-")) Color.Red else Color.Green,
+                        color = if (it.contains("-")) Color.Red else green,
                         modifier = Modifier.padding(end = 8.dp, top = 8.dp, bottom = 2.dp)
                     )
                 }

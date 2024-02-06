@@ -26,6 +26,7 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.app.coins.utils.ScreenRoutes
+import com.app.coins.utils.theme.FontType
 import com.app.coins.utils.theme.darkTextColor
 import com.app.coins.utils.theme.light
 import com.app.coins.utils.theme.primaryBackgroundColor
@@ -96,6 +97,7 @@ fun BottomBar(
                         Text(
                             text = item.title,
                             fontSize = 10.sp,
+                            fontFamily = FontType.quicksandBold
                         )
                     },
                     icon = {
