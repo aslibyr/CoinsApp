@@ -2,7 +2,7 @@ package com.app.coins.data.model
 
 import com.squareup.moshi.Json
 
-data class NftResponse(
+data class NftCollectionResponse(
 
 	@Json(name = "data")
 	val data: List<DataItem?>? = null,

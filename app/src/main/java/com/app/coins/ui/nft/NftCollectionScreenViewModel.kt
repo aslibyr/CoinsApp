@@ -2,7 +2,7 @@ package com.app.coins.ui.nft
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.app.coins.data.model.NftResponse
+import com.app.coins.data.model.NftCollectionResponse
 import com.app.coins.data.remote.webservice.WebService
 import com.app.coins.utils.ResultWrapper
 import com.app.coins.utils.safeApiCall
@@ -15,18 +15,19 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class NftScreenViewModel @Inject constructor(private val webService: WebService) : ViewModel() {
+class NftCollectionScreenViewModel @Inject constructor(private val webService: WebService) :
+    ViewModel() {
 
     private val _uiState = MutableStateFlow(NftUIStateModel(nftData = null))
     val uiState = _uiState.asStateFlow()
 
     init {
-        getNfts()
+        getNftCollections()
     }
 
-    private fun getNfts() {
+    private fun getNftCollections() {
         viewModelScope.launch {
-            when (val response = safeApiCall(Dispatchers.IO) { webService.getNfts() }) {
+            when (val response = safeApiCall(Dispatchers.IO) { webService.getNftCollections() }) {
                 is ResultWrapper.GenericError -> {
                     _uiState.update {
                         it.copy(errorMessage = response.error.toString())
@@ -59,7 +60,7 @@ class NftScreenViewModel @Inject constructor(private val webService: WebService)
 }
 
 data class NftUIStateModel(
-    val nftData: NftResponse?,
+    val nftData: NftCollectionResponse?,
     val isLoading: Boolean = false,
     val errorMessage: String = "",
 )

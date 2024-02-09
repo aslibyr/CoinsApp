@@ -2,9 +2,10 @@ package com.app.coins.data.remote.webservice
 
 import com.app.coins.data.model.BasePagingResponse
 import com.app.coins.data.model.ChartsResponse
+import com.app.coins.data.model.CollectionDetailResponse
 import com.app.coins.data.model.CryptoResponse
 import com.app.coins.data.model.MarketResponse
-import com.app.coins.data.model.NftResponse
+import com.app.coins.data.model.NftCollectionResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -33,8 +34,13 @@ interface WebService {
     suspend fun getMarkets(): MarketResponse
 
     @GET("nft/trending")
-    suspend fun getNfts(
+    suspend fun getNftCollections(
         @Query("limit") limit: Int = 100
-    ): NftResponse
+    ): NftCollectionResponse
+
+    @GET("nft/collection/{collectionAddress}")
+    suspend fun getNftCollectionDetails(
+        @Path("collectionAddress") collectionAddress: String
+    ): CollectionDetailResponse
 
 }

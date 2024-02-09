@@ -49,8 +49,8 @@ import com.app.coins.utils.theme.secondaryBackgroundColor
 import com.app.coins.utils.theme.textColor
 
 @Composable
-fun NftScreen(
-    viewModel: NftScreenViewModel = hiltViewModel()
+fun NftCollectionScreen(
+    viewModel: NftCollectionScreenViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     if (uiState.isLoading) {
@@ -82,7 +82,6 @@ fun NftScreen(
                 items(list) { item ->
                     if (item != null) {
                         NftListItem(nft = item) {
-
                         }
                     }
                 }
@@ -229,7 +228,7 @@ fun NftListItem(nft: DataItem, onItemClick: () -> Unit) {
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.End
                     ) {
-                        nft.volume.toString().let { volume ->
+                        nft.volume?.toString()?.let { volume ->
                             val formattedPrice = PriceFormatterUtil.formatPrice(volume)
                             Text(
                                 text = "${formattedPrice} ",
