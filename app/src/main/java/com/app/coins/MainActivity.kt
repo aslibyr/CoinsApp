@@ -10,7 +10,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.rememberNavController
 import com.app.coins.custom.bottom_bar.BottomBar
 import com.app.coins.custom.navigation.MainNavigation
@@ -23,7 +22,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val context = LocalContext.current
             val navController = rememberNavController()
             CoinsTheme {
                 // A surface container using the 'background' color from the theme

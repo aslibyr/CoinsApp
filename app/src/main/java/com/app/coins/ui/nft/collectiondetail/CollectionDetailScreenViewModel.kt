@@ -1,27 +1,78 @@
 package com.app.coins.ui.nft.collectiondetail
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.coins.data.model.CollectionDetailResponse
-import com.app.coins.domain.use_case.GetCollectionDetailsUseCase
+import com.app.coins.data.remote.webservice.WebService
+import com.app.coins.ui.nft.NftCollectionScreenViewModel
+import com.app.coins.utils.ResultWrapper
+import com.app.coins.utils.safeApiCall
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CollectionDetailScreenViewModel @Inject constructor(private val getCollectionDetailsUseCase: GetCollectionDetailsUseCase) :
-    ViewModel() {
-    private val _collectionDetails = MutableLiveData<List<CollectionDetailResponse>>()
-    val collectionDetails: LiveData<List<CollectionDetailResponse>> get() = _collectionDetails
+class CollectionDetailScreenViewModel @Inject constructor(
+    private val webService: WebService,
+    private val nftCollectionViewModel: NftCollectionScreenViewModel
+) : ViewModel() {
+    private val _uiState = MutableStateFlow(CollectionUIStateModel(collectionData = null))
+    val uiState = _uiState.asStateFlow()
 
-    fun fetchCollectionDetails(response: CollectionDetailResponse) {
-        viewModelScope.launch(Dispatchers.IO) {
-            val detailResponse = getCollectionDetailsUseCase.execute(response)
-            _collectionDetails.value = detailResponse
+    init {
+        observeCollectionAddresses()
+    }
+
+    private fun observeCollectionAddresses() {
+        viewModelScope.launch {
+            val collectionAddresses = nftCollectionViewModel.collectionAddresses
+            collectionAddresses.forEach { address ->
+                fetchCollectionDetails(address)
+            }
         }
+    }
 
+    private fun fetchCollectionDetails(collectionAddress: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            when (val response =
+                safeApiCall(Dispatchers.IO) { webService.getNftCollectionDetails(collectionAddress) }) {
+                is ResultWrapper.Success -> {
+                    _uiState.update {
+                        it.copy(
+                            collectionData = response.value,
+                            isLoading = false
+                        )
+                    }
+                }
+
+                is ResultWrapper.GenericError -> {
+                    _uiState.update {
+                        it.copy(errorMessage = response.error.toString())
+                    }
+                }
+
+                is ResultWrapper.NetworkError -> {
+                    _uiState.update {
+                        it.copy(errorMessage = "İnternet bağlantınızı kontrol edin.")
+                    }
+                }
+
+                ResultWrapper.Loading -> {
+                    _uiState.update {
+                        it.copy(isLoading = true)
+                    }
+                }
+            }
+        }
     }
 }
+
+data class CollectionUIStateModel(
+    val collectionData: CollectionDetailResponse?,
+    val isLoading: Boolean = false,
+    val errorMessage: String = ""
+)
