@@ -1,13 +1,29 @@
 package com.app.coins.ui.nft.collectiondetail
 
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.app.coins.ui.nft.NftCollectionScreenViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 @Composable
 fun CollectionDetailScreen(
-    viewModel: NftCollectionScreenViewModel = hiltViewModel(),
+    viewModel: CollectionDetailScreenViewModel = hiltViewModel(),
+    onBackClick: () -> Unit
 ) {
-    Text(text = viewModel.collectionAddresses[0])
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    if (uiState.isLoading) {
+        CircularProgressIndicator()
+    }
+    if (uiState.isSuccess) {
+        uiState.collectionData?.let {
+
+            Text(text = it?.name.toString())
+
+
+        }
+    }
+
 }
+

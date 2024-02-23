@@ -42,6 +42,7 @@ import coil.compose.SubcomposeAsyncImage
 import com.app.coins.R
 import com.app.coins.data.model.DataItem
 import com.app.coins.utils.PriceFormatterUtil
+import com.app.coins.utils.ScreenRoutes
 import com.app.coins.utils.theme.FontType
 import com.app.coins.utils.theme.light
 import com.app.coins.utils.theme.primaryBackgroundColor
@@ -50,7 +51,8 @@ import com.app.coins.utils.theme.textColor
 
 @Composable
 fun NftCollectionScreen(
-    viewModel: NftCollectionScreenViewModel = hiltViewModel()
+    viewModel: NftCollectionScreenViewModel = hiltViewModel(),
+    nftClicked: (String) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     if (uiState.isLoading) {
@@ -81,8 +83,13 @@ fun NftCollectionScreen(
             uiState.nftData?.data?.let { list ->
                 items(list) { item ->
                     if (item != null) {
-                        NftListItem(nft = item) {
-                        }
+                        NftListItem(nft = item, onItemClick = {
+                            val route = ScreenRoutes.COLLECTION_DETAIL_SCREEN_ROUTE.replace(
+                                oldValue = "{collectionAddress}",
+                                newValue = item.address.toString()
+                            )
+                            nftClicked(route)
+                        })
                     }
                 }
             }

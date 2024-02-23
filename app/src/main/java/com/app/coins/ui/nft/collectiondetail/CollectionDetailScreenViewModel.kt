@@ -1,10 +1,10 @@
 package com.app.coins.ui.nft.collectiondetail
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.coins.data.model.CollectionDetailResponse
 import com.app.coins.data.remote.webservice.WebService
-import com.app.coins.ui.nft.NftCollectionScreenViewModel
 import com.app.coins.utils.ResultWrapper
 import com.app.coins.utils.safeApiCall
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,22 +18,14 @@ import javax.inject.Inject
 @HiltViewModel
 class CollectionDetailScreenViewModel @Inject constructor(
     private val webService: WebService,
-    private val nftCollectionViewModel: NftCollectionScreenViewModel
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
+    val address = checkNotNull(savedStateHandle.get<String>("collectionAddress"))
     private val _uiState = MutableStateFlow(CollectionUIStateModel(collectionData = null))
     val uiState = _uiState.asStateFlow()
 
     init {
-        observeCollectionAddresses()
-    }
-
-    private fun observeCollectionAddresses() {
-        viewModelScope.launch {
-            val collectionAddresses = nftCollectionViewModel.collectionAddresses
-            collectionAddresses.forEach { address ->
-                fetchCollectionDetails(address)
-            }
-        }
+        fetchCollectionDetails(collectionAddress = address)
     }
 
     private fun fetchCollectionDetails(collectionAddress: String) {
@@ -44,27 +36,32 @@ class CollectionDetailScreenViewModel @Inject constructor(
                     _uiState.update {
                         it.copy(
                             collectionData = response.value,
-                            isLoading = false
+                            isLoading = false,
+                            isSuccess = true
                         )
                     }
                 }
 
                 is ResultWrapper.GenericError -> {
                     _uiState.update {
-                        it.copy(errorMessage = response.error.toString())
+                        it.copy(
+                            errorMessage = response.error.toString(),
+                            isLoading = false
+                        )
                     }
                 }
 
                 is ResultWrapper.NetworkError -> {
                     _uiState.update {
-                        it.copy(errorMessage = "İnternet bağlantınızı kontrol edin.")
+                        it.copy(
+                            errorMessage = "İnternet bağlantınızı kontrol edin.",
+                            isLoading = false
+                        )
                     }
                 }
 
                 ResultWrapper.Loading -> {
-                    _uiState.update {
-                        it.copy(isLoading = true)
-                    }
+
                 }
             }
         }
@@ -73,6 +70,7 @@ class CollectionDetailScreenViewModel @Inject constructor(
 
 data class CollectionUIStateModel(
     val collectionData: CollectionDetailResponse?,
-    val isLoading: Boolean = false,
+    val isLoading: Boolean = true,
+    val isSuccess: Boolean = false,
     val errorMessage: String = ""
 )

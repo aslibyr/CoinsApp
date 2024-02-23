@@ -6,35 +6,34 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
-import com.app.coins.ui.crypto.CryptoScreen
-import com.app.coins.ui.crypto.detail.DetailScreen
+import com.app.coins.ui.nft.NftCollectionScreen
+import com.app.coins.ui.nft.collectiondetail.CollectionDetailScreen
 import com.app.coins.utils.ScreenRoutes
 
-fun NavGraphBuilder.cryptoGraph(
+fun NavGraphBuilder.nftGraph(
     navController: NavController,
     shouldBottomBarVisible: (Boolean) -> Unit
 ) {
     navigation(
-        startDestination = ScreenRoutes.CRYPTO_SCREEN_ROUTE,
-        route = ScreenRoutes.CRYPTO_HOST_ROUTE
+        startDestination = ScreenRoutes.NFT_SCREEN_ROUTE,
+        route = ScreenRoutes.NFT_HOST_ROUTE
     ) {
         composable(
-            route = ScreenRoutes.CRYPTO_SCREEN_ROUTE
+            route = ScreenRoutes.NFT_SCREEN_ROUTE
         ) {
-            CryptoScreen(cryptoClicked = { route ->
+            NftCollectionScreen(nftClicked = { route ->
                 navController.navigate(route)
             })
-
         }
         composable(
-            route = ScreenRoutes.CRYPTO_DETAIL_SCREEN_ROUTE,
+            route = ScreenRoutes.COLLECTION_DETAIL_SCREEN_ROUTE,
             arguments = listOf(
-                navArgument("id") {
+                navArgument("collectionAddress") {
                     type = NavType.StringType
                 }
             )
         ) {
-            DetailScreen(onBackClick = {
+            CollectionDetailScreen(onBackClick = {
                 navController.popBackStack()
             })
         }

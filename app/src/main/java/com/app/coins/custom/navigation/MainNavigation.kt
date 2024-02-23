@@ -7,8 +7,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.app.coins.custom.navigation.graphs.cryptoGraph
-import com.app.coins.ui.nft.NftCollectionScreen
-import com.app.coins.ui.nft.collectiondetail.CollectionDetailScreen
+import com.app.coins.custom.navigation.graphs.nftGraph
+import com.app.coins.ui.more.MoreScreen
 import com.app.coins.utils.ScreenRoutes
 
 @Composable
@@ -25,17 +25,13 @@ fun MainNavigation(
         ) {
         cryptoGraph(navController, shouldBottomBarVisible = {})
 
-        composable(
-            route = ScreenRoutes.NFT_SCREEN_ROUTE
-        ) {
-            NftCollectionScreen()
+        nftGraph(navController, shouldBottomBarVisible = {})
 
-        }
         composable(
             route = ScreenRoutes.MORE_SCREEN_ROUTE
         ) {
-            CollectionDetailScreen()
-
+            MoreScreen()
         }
+
     }
 }

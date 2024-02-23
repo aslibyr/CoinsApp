@@ -68,7 +68,7 @@ fun BottomBar(
         BottomNavigationItem(
             title = "NFT's",
             icon = Icons.Filled.Image,
-            route = ScreenRoutes.NFT_SCREEN_ROUTE
+            route = ScreenRoutes.NFT_HOST_ROUTE
         ),
         BottomNavigationItem(
             title = "More",

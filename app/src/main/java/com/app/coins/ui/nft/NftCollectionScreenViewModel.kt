@@ -10,6 +10,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,10 +21,8 @@ class NftCollectionScreenViewModel @Inject constructor(
     ) :
     ViewModel() {
 
-    private val _uiState = MutableStateFlow(NftUIStateModel(nftData = null))
+    private val _uiState = MutableStateFlow(NftUIStateModel())
     val uiState = _uiState.asStateFlow()
-
-    val collectionAddresses = mutableListOf<String>()
 
 
     init {
@@ -35,26 +34,37 @@ class NftCollectionScreenViewModel @Inject constructor(
         viewModelScope.launch {
             when (val response = safeApiCall(Dispatchers.IO) { webService.getNftCollections() }) {
                 is ResultWrapper.Success -> {
-                    val addresses = response.value.data?.mapNotNull { it?.address } ?: emptyList()
-                    setCollectionAddresses(addresses)
+                    val nftResponse = response.value
+                    _uiState.update {
+                        it.copy(nftData = nftResponse, isLoading = false)
+                    }
                 }
                 // Handle other result types
-                else -> {
-                    error("error")
+                is ResultWrapper.GenericError -> {
+                    _uiState.update {
+                        it.copy(errorMessage = response.error.toString())
+                    }
+                }
+
+                ResultWrapper.Loading -> {
+                    _uiState.update {
+                        it.copy(isLoading = true)
+                    }
+                }
+
+                ResultWrapper.NetworkError -> {
+                    _uiState.update {
+                        it.copy(errorMessage = "İnternet bağlantınızı kontrol edin.")
+                    }
                 }
             }
         }
-    }
-
-    private fun setCollectionAddresses(addresses: List<String>) {
-        collectionAddresses.clear()
-        collectionAddresses.addAll(addresses)
     }
 }
 
 
 data class NftUIStateModel(
-    val nftData: NftCollectionResponse?,
-    val isLoading: Boolean = false,
+    val nftData: NftCollectionResponse? = null,
+    val isLoading: Boolean = true,
     val errorMessage: String = "",
 )
