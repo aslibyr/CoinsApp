@@ -2,6 +2,7 @@ package com.app.coins.data.remote.webservice
 
 import com.app.coins.data.model.BasePagingResponse
 import com.app.coins.data.model.ChartsResponse
+import com.app.coins.data.model.CollectionAssetsResponse
 import com.app.coins.data.model.CollectionDetailResponse
 import com.app.coins.data.model.CryptoResponse
 import com.app.coins.data.model.MarketResponse
@@ -43,4 +44,8 @@ interface WebService {
         @Path("collectionAddress") collectionAddress: String
     ): CollectionDetailResponse
 
+    @GET("nft/{collectionAddress}/assets")
+    suspend fun getNftCollectionAssets(
+        @Path("collectionAddress") collectionAddress: String
+    ): CollectionAssetsResponse
 }
