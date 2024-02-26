@@ -195,9 +195,9 @@ fun CryptoListItem(coin: CryptoUIModel, onItemClick: () -> Unit) {
                 model = coin.icon,
                 contentDescription = "",
                 placeholder = painterResource(
-                    id = R.drawable.ic_launcher_background
+                    id = R.drawable.error
                 ),
-                error = painterResource(id = R.drawable.ic_launcher_background)
+                error = painterResource(id = R.drawable.error)
             )
             coin.name?.let {
                 Text(

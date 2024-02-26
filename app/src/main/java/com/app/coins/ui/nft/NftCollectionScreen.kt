@@ -40,6 +40,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.SubcomposeAsyncImage
 import com.app.coins.R
+import com.app.coins.custom.loading.LoadingDialog
 import com.app.coins.data.model.DataItem
 import com.app.coins.utils.PriceFormatterUtil
 import com.app.coins.utils.ScreenRoutes
@@ -56,7 +57,7 @@ fun NftCollectionScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     if (uiState.isLoading) {
-        CircularProgressIndicator()
+        LoadingDialog()
     }
     uiState.nftData?.let {
         Text(text = it.data?.get(0)?.name.toString())

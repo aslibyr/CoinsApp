@@ -100,9 +100,9 @@ fun StateLessCryptoDetail(
             model = crypto.icon,
             contentDescription = "",
             placeholder = painterResource(
-                id = R.drawable.ic_launcher_background
+                id = R.drawable.error
             ),
-            error = painterResource(id = R.drawable.ic_launcher_background)
+            error = painterResource(id = R.drawable.error)
         )
         crypto.name?.let {
             Text(

@@ -18,7 +18,6 @@ fun LoadingDialog(
             dismissOnClickOutside = dismissOnClickOutside
         )
     ) {
-
         CircularProgressIndicator(color = light)
 
     }
