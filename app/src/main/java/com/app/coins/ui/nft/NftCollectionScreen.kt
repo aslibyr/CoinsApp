@@ -127,7 +127,9 @@ fun NftListItem(nft: DataItem, onItemClick: () -> Unit) {
                 },
                 error = {
                     Image(
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .clip(RoundedCornerShape(60.dp)),
                         contentScale = ContentScale.Crop,
                         painter = painterResource(id = R.drawable.error),
                         contentDescription = ""
@@ -163,7 +165,6 @@ fun NftListItem(nft: DataItem, onItemClick: () -> Unit) {
                         overflow = TextOverflow.Ellipsis
                     )
                 }
-
             }
 
             Row(
@@ -206,7 +207,6 @@ fun NftListItem(nft: DataItem, onItemClick: () -> Unit) {
                             )
                         }
                     }
-
                 }
 
                 Column(
