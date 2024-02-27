@@ -13,12 +13,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -189,8 +187,8 @@ fun CryptoListItem(coin: CryptoUIModel, onItemClick: () -> Unit) {
         ) {
             AsyncImage(
                 modifier = Modifier
-                    .size(40.dp)
-                    .clip(CircleShape)
+                    .height(40.dp)
+                    .width(40.dp)
                     .weight(1f),
                 model = coin.icon,
                 contentDescription = "",

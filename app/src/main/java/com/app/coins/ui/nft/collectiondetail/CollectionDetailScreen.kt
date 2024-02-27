@@ -1,10 +1,13 @@
 package com.app.coins.ui.nft.collectiondetail
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,11 +15,17 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.NavigateBefore
 import androidx.compose.material.icons.filled.Verified
 import androidx.compose.material.icons.outlined.Language
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,6 +39,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -38,6 +48,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
 import com.app.coins.R
 import com.app.coins.custom.loading.LoadingDialog
 import com.app.coins.data.model.AssetsDataItem
@@ -48,6 +59,7 @@ import com.app.coins.utils.theme.light
 import com.app.coins.utils.theme.primaryBackgroundColor
 import com.app.coins.utils.theme.secondaryBackgroundColor
 import com.app.coins.utils.theme.textColor
+import com.app.coins.utils.widthPercent
 
 @Composable
 fun CollectionDetailScreen(
@@ -76,8 +88,9 @@ fun CollectionDetailScreen(
             ) {
                 uiState.collectionData?.let { collectionData ->
                     uiState.assetsData?.let { assetsData ->
-                        assetsData.data?.get(0)
-                            ?.let { CollectionDetailItem(collectionData, it, onBackClick) }
+                        CollectionDetailUI(nft = collectionData, asset = assetsData.data) {
+                            onBackClick()
+                        }
                     }
                 }
             }
@@ -86,11 +99,16 @@ fun CollectionDetailScreen(
 }
 
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun CollectionDetailItem(
-    nft: CollectionDetailResponse, asset: AssetsDataItem, onBackClick: () -> Unit
+fun CollectionDetailUI(
+    nft: CollectionDetailResponse, asset: List<AssetsDataItem?>?, onBackClick: () -> Unit
 ) {
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+    ) {
         AsyncImage(
             modifier = Modifier
                 .height(230.dp)
@@ -125,19 +143,22 @@ fun CollectionDetailItem(
                 error = painterResource(id = R.drawable.error)
             )
 
-
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(top = 16.dp)
                     .clip(RoundedCornerShape(topStart = 60.dp, topEnd = 60.dp))
                     .background(
-                        light
+                        brush = Brush.linearGradient(
+                            colors = listOf(
+                                primaryBackgroundColor, secondaryBackgroundColor
+                            )
+                        )
                     ), horizontalAlignment = Alignment.CenterHorizontally
             ) {
+
                 Column(
-                    modifier = Modifier
-                        .background(secondaryBackgroundColor),
+                    modifier = Modifier,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     nft.oneDayAveragePrice?.let { price ->
@@ -151,6 +172,7 @@ fun CollectionDetailItem(
                             color = textColor
                         )
                     }
+
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -172,6 +194,7 @@ fun CollectionDetailItem(
                             )
                         }
                     }
+
                     Row(
                         modifier = Modifier.padding(top = 8.dp),
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -202,12 +225,14 @@ fun CollectionDetailItem(
                             .fillMaxWidth()
                             .padding(top = 4.dp, bottom = 8.dp)
                     ) {
+
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .weight(1f)
                                 .padding(start = 8.dp)
                         ) {
+
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
                                 verticalAlignment = Alignment.CenterVertically
@@ -246,6 +271,7 @@ fun CollectionDetailItem(
                                 .weight(1f),
                             horizontalAlignment = Alignment.End
                         ) {
+
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
                                 verticalAlignment = Alignment.CenterVertically,
@@ -280,6 +306,30 @@ fun CollectionDetailItem(
                         }
                     }
                 }
+                FlowRow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(
+                            brush = Brush.linearGradient(
+                                colors = listOf(
+                                    primaryBackgroundColor, secondaryBackgroundColor
+                                )
+                            )
+                        )
+                        .padding(horizontal = 8.dp, vertical = 8.dp),
+                    maxItemsInEachRow = 2,
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    asset?.let { assetsDataItems ->
+                        assetsDataItems.forEach { assetsDataItem ->
+                            assetsDataItem?.let {
+                                AssetsItem(assetsDataItem = it) {
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
         Icon(imageVector = Icons.Filled.NavigateBefore,
@@ -293,6 +343,150 @@ fun CollectionDetailItem(
                 }
                 .shadow(50.dp),
             tint = textColor)
+    }
+}
+
+@Composable
+fun AssetsItem(assetsDataItem: AssetsDataItem, onItemClick: () -> Unit) {
+    val configuration = LocalConfiguration.current
+    Card(
+        modifier = Modifier
+            .clip(RoundedCornerShape(20.dp))
+            .widthPercent(0.45f, configuration)
+            .height(250.dp)
+            .clickable {
+                onItemClick()
+            },
+        elevation = CardDefaults.cardElevation(6.dp),
+        colors = CardDefaults.cardColors(secondaryBackgroundColor)
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            SubcomposeAsyncImage(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(180.dp),
+                model = assetsDataItem.url,
+                contentDescription = "",
+                loading = {
+                    CircularProgressIndicator()
+                },
+                error = {
+                    Image(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        contentScale = ContentScale.Crop,
+                        painter = painterResource(id = R.drawable.error),
+                        contentDescription = ""
+                    )
+                },
+                contentScale = ContentScale.Crop
+            )
+            Row(
+                modifier = Modifier
+                    .background(secondaryBackgroundColor)
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+                    .padding(start = 8.dp, top = 4.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                assetsDataItem.name?.let {
+                    Text(
+                        text = it,
+                        fontFamily = FontType.quicksandBold,
+                        color = textColor,
+                        fontSize = 12.sp,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 4.dp)
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .padding(start = 8.dp)
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "List price",
+                            fontFamily = FontType.quicksandMedium,
+                            color = light,
+                            fontSize = 12.sp,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        assetsDataItem.listPrice?.toString()?.let { price ->
+                            val formattedPrice = PriceFormatterUtil.formatPrice(price)
+                            Text(
+                                text = "$formattedPrice $ ",
+                                color = light,
+                                fontSize = 10.sp,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        }
+                    }
+                }
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(end = 8.dp)
+                        .weight(1f),
+                    horizontalAlignment = Alignment.End
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.End
+                    ) {
+                        Text(
+                            text = "Volume",
+                            fontFamily = FontType.quicksandMedium,
+                            color = light,
+                            fontSize = 12.sp,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.End
+                    ) {
+                        assetsDataItem.rarityScore?.toString()?.let { volume ->
+                            val formattedPrice = PriceFormatterUtil.formatPrice(volume)
+                            Text(
+                                text = "${formattedPrice} ",
+                                color = light,
+                                fontSize = 10.sp,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 

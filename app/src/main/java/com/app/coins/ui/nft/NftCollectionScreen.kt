@@ -59,9 +59,6 @@ fun NftCollectionScreen(
     if (uiState.isLoading) {
         LoadingDialog()
     }
-    uiState.nftData?.let {
-        Text(text = it.data?.get(0)?.name.toString())
-    }
 
     Box(
         modifier = Modifier
@@ -128,8 +125,7 @@ fun NftListItem(nft: DataItem, onItemClick: () -> Unit) {
                 error = {
                     Image(
                         modifier = Modifier
-                            .fillMaxSize()
-                            .clip(RoundedCornerShape(60.dp)),
+                            .fillMaxSize(),
                         contentScale = ContentScale.Crop,
                         painter = painterResource(id = R.drawable.error),
                         contentDescription = ""
