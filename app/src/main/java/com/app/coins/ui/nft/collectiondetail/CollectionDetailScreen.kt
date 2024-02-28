@@ -316,7 +316,8 @@ fun CollectionDetailUI(
                                 )
                             )
                         )
-                        .padding(horizontal = 8.dp, vertical = 8.dp),
+                        .padding(horizontal = 8.dp)
+                        .padding(top = 8.dp, bottom = 100.dp),
                     maxItemsInEachRow = 2,
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)

@@ -46,6 +46,7 @@ interface WebService {
 
     @GET("nft/{collectionAddress}/assets")
     suspend fun getNftCollectionAssets(
-        @Path("collectionAddress") collectionAddress: String
+        @Path("collectionAddress") collectionAddress: String,
+        @Query("limit") limit: Int = 100
     ): CollectionAssetsResponse
 }

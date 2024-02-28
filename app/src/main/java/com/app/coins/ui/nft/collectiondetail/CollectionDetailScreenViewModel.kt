@@ -72,7 +72,7 @@ class CollectionDetailScreenViewModel @Inject constructor(
     private fun getCollectionAssets(collectionAddress: String) {
         viewModelScope.launch(Dispatchers.IO) {
             when (val response =
-                safeApiCall(Dispatchers.IO) { webService.getNftCollectionAssets(collectionAddress) }) {
+                safeApiCall(Dispatchers.IO) { webService.getNftCollectionAssets(collectionAddress = collectionAddress) }) {
                 is ResultWrapper.Success -> {
                     _uiState.update {
                         it.copy(
