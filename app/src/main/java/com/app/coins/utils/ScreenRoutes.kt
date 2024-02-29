@@ -9,5 +9,7 @@ object ScreenRoutes {
     const val MORE_SCREEN_ROUTE = "more_screen_route"
     const val CRYPTO_DETAIL_SCREEN_ROUTE = "crypto_detail_screen_route/{id}"
     const val CRYPTO_HOST_ROUTE = "crypto_host_route"
-
+    const val NEWS_HOST_ROUTE = "news_host_route"
+    const val NEWS_SCREEN_ROUTE = "news_screen_route"
+    const val NEWS_DETAIL_SCREEN_ROUTE = "news_detail_screen_route/{id}"
 }

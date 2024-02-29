@@ -21,7 +21,7 @@ class CollectionDetailScreenViewModel @Inject constructor(
     private val webService: WebService,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    val address = checkNotNull(savedStateHandle.get<String>("collectionAddress"))
+    private val address = checkNotNull(savedStateHandle.get<String>("collectionAddress"))
     private val _uiState = MutableStateFlow(CollectionUIStateModel())
     val uiState = _uiState.asStateFlow()
 
@@ -102,7 +102,6 @@ class CollectionDetailScreenViewModel @Inject constructor(
                 }
 
                 ResultWrapper.Loading -> {
-
                 }
             }
         }

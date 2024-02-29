@@ -9,6 +9,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.MoreHoriz
+import androidx.compose.material.icons.filled.Newspaper
 import androidx.compose.material.icons.outlined.MonetizationOn
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -71,11 +72,15 @@ fun BottomBar(
             route = ScreenRoutes.NFT_HOST_ROUTE
         ),
         BottomNavigationItem(
+            title = "News",
+            icon = Icons.Filled.Newspaper,
+            route = ScreenRoutes.NEWS_SCREEN_ROUTE
+        ),
+        BottomNavigationItem(
             title = "More",
             icon = Icons.Filled.MoreHoriz,
             route = ScreenRoutes.MORE_SCREEN_ROUTE
         )
-
     )
 
     Column(modifier = Modifier.fillMaxWidth()) {
