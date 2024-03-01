@@ -3,7 +3,7 @@ package com.app.coins.ui.news.newsdetail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.app.coins.data.model.ResultItem
+import com.app.coins.data.model.NewsDetailResponse
 import com.app.coins.data.remote.webservice.WebService
 import com.app.coins.utils.ResultWrapper
 import com.app.coins.utils.safeApiCall
@@ -67,7 +67,7 @@ class NewsDetailScreenViewModel @Inject constructor(
 }
 
 data class NewsDetailUIStateModel(
-    val newsDetailData: ResultItem? = null,
+    val newsDetailData: NewsDetailResponse? = null,
     val isLoading: Boolean = true,
     val errorMessage: String = "",
     val isSuccess: Boolean = false

@@ -6,9 +6,9 @@ import com.app.coins.data.model.CollectionAssetsResponse
 import com.app.coins.data.model.CollectionDetailResponse
 import com.app.coins.data.model.CryptoResponse
 import com.app.coins.data.model.MarketResponse
+import com.app.coins.data.model.NewsDetailResponse
 import com.app.coins.data.model.NewsResponse
 import com.app.coins.data.model.NftCollectionResponse
-import com.app.coins.data.model.ResultItem
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -58,5 +58,5 @@ interface WebService {
     @GET("news/{id}")
     suspend fun getNewsDetails(
         @Path("id") id: String
-    ): ResultItem
+    ): NewsDetailResponse
 }

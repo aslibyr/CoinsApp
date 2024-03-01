@@ -3,7 +3,6 @@ package com.app.coins.ui.news.newsdetail
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -19,7 +18,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.app.coins.R
 import com.app.coins.custom.loading.LoadingDialog
-import com.app.coins.data.model.ResultItem
+import com.app.coins.data.model.NewsDetailResponse
 import com.app.coins.utils.theme.primaryBackgroundColor
 import com.app.coins.utils.theme.secondaryBackgroundColor
 
@@ -55,15 +54,13 @@ fun NewsDetailScreen(
                         onBackClick()
                     }
                 }
-                uiState.newsDetailData?.title?.let { Text(text = it) }
             }
         }
     }
-
 }
 
 @Composable
-fun NewsDetailUI(news: ResultItem, onBackClick: () -> Unit) {
+fun NewsDetailUI(news: NewsDetailResponse, onBackClick: () -> Unit) {
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp),
         modifier = Modifier
@@ -73,15 +70,18 @@ fun NewsDetailUI(news: ResultItem, onBackClick: () -> Unit) {
         news.imgUrl?.let { imageUrl ->
             AsyncImage(
                 modifier = Modifier.fillMaxWidth(),
-                model = imageUrl, contentDescription = "", placeholder = painterResource(
+                model = imageUrl, contentDescription = "",
+                placeholder = painterResource(
                     id = R.drawable.error
-                ), error = painterResource(id = R.drawable.error)
+                ),
+                error = painterResource(id = R.drawable.error),
             )
         }
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            news.title?.let {
-                Text(text = it)
-            }
+
+        news.title?.let {
+            Text(text = it)
         }
+        news.description?.let { Text(text = it) }
+
     }
 }

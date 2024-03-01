@@ -74,7 +74,7 @@ fun BottomBar(
         BottomNavigationItem(
             title = "News",
             icon = Icons.Filled.Newspaper,
-            route = ScreenRoutes.NEWS_SCREEN_ROUTE
+            route = ScreenRoutes.NEWS_HOST_ROUTE
         ),
         BottomNavigationItem(
             title = "More",
