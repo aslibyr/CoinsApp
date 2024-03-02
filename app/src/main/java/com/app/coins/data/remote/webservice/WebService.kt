@@ -5,7 +5,6 @@ import com.app.coins.data.model.ChartsResponse
 import com.app.coins.data.model.CollectionAssetsResponse
 import com.app.coins.data.model.CollectionDetailResponse
 import com.app.coins.data.model.CryptoResponse
-import com.app.coins.data.model.MarketResponse
 import com.app.coins.data.model.NewsDetailResponse
 import com.app.coins.data.model.NewsResponse
 import com.app.coins.data.model.NftCollectionResponse
@@ -33,9 +32,6 @@ interface WebService {
         @Query("period") period: String = "24h"
     ): List<ChartsResponse>
 
-    @GET("markets")
-    suspend fun getMarkets(): MarketResponse
-
     @GET("nft/trending")
     suspend fun getNftCollections(
         @Query("limit") limit: Int = 100
@@ -53,7 +49,9 @@ interface WebService {
     ): CollectionAssetsResponse
 
     @GET("news")
-    suspend fun getNews(): NewsResponse
+    suspend fun getNews(
+        @Query("limit") limit: Int = 100
+    ): NewsResponse
 
     @GET("news/{id}")
     suspend fun getNewsDetails(

@@ -33,6 +33,7 @@ fun TopBarView(
     model: TopBarComponentUIModel,
     showRoundedCorner: Boolean = false,
     onBackClick: () -> Unit = {},
+    onEndIconClick: () -> Unit = {}
 ) {
     val transparentColor = Color.Transparent
 
@@ -76,6 +77,19 @@ fun TopBarView(
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
+            model.endIcon?.let {
+                Icon(
+                    imageVector = it, "",
+                    modifier = Modifier
+                        .size(36.dp)
+                        .padding(end = 16.dp, top = 16.dp)
+                        .clickable {
+                            onEndIconClick()
+                        }
+                        .align(Alignment.TopEnd),
+                    tint = darkTextColor
+                )
+            }
         }
     }
 }

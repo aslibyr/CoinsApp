@@ -55,6 +55,7 @@ import com.app.coins.data.model.AssetsDataItem
 import com.app.coins.data.model.CollectionDetailResponse
 import com.app.coins.utils.PriceFormatterUtil
 import com.app.coins.utils.theme.FontType
+import com.app.coins.utils.theme.darkTextColor
 import com.app.coins.utils.theme.light
 import com.app.coins.utils.theme.primaryBackgroundColor
 import com.app.coins.utils.theme.secondaryBackgroundColor
@@ -161,17 +162,6 @@ fun CollectionDetailUI(
                     modifier = Modifier,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    nft.oneDayAveragePrice?.let { price ->
-                        val formattedPrice = PriceFormatterUtil.formatPrice(price.toString())
-                        Text(
-                            modifier = Modifier
-                                .padding(start = 30.dp),
-                            text = "$formattedPrice $ ",
-                            fontSize = 24.sp,
-                            fontFamily = FontType.quicksandBold,
-                            color = textColor
-                        )
-                    }
 
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
@@ -180,7 +170,7 @@ fun CollectionDetailUI(
                         nft.name?.let {
                             Text(
                                 text = it,
-                                color = textColor,
+                                color = darkTextColor,
                                 fontSize = 20.sp,
                                 fontFamily = FontType.quicksandBold
                             )
@@ -190,7 +180,7 @@ fun CollectionDetailUI(
                                 Icons.Filled.Verified,
                                 contentDescription = "Verified",
                                 modifier = Modifier.size(20.dp),
-                                tint = textColor
+                                tint = darkTextColor
                             )
                         }
                     }
@@ -203,19 +193,19 @@ fun CollectionDetailUI(
                         Icon(
                             imageVector = Icons.Outlined.Language,
                             contentDescription = "",
-                            tint = textColor,
+                            tint = darkTextColor,
                             modifier = Modifier.size(32.dp)
                         )
                         Icon(
                             imageVector = ImageVector.vectorResource(id = R.drawable.twitter_icon),
                             contentDescription = "",
-                            tint = textColor,
+                            tint = darkTextColor,
                             modifier = Modifier.size(32.dp)
                         )
                         Icon(
                             imageVector = ImageVector.vectorResource(id = R.drawable.discord_icon),
                             contentDescription = "",
-                            tint = textColor,
+                            tint = darkTextColor,
                             modifier = Modifier.size(32.dp)
                         )
                     }
@@ -240,7 +230,7 @@ fun CollectionDetailUI(
                                 Text(
                                     text = "Floor Price",
                                     fontFamily = FontType.quicksandMedium,
-                                    color = textColor,
+                                    color = darkTextColor,
                                     fontSize = 16.sp,
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis
@@ -255,7 +245,7 @@ fun CollectionDetailUI(
                                     val formattedPrice = PriceFormatterUtil.formatPrice(price)
                                     Text(
                                         text = "$formattedPrice $ ",
-                                        color = textColor,
+                                        color = darkTextColor,
                                         fontSize = 12.sp,
                                         maxLines = 1,
                                         overflow = TextOverflow.Ellipsis
@@ -280,7 +270,7 @@ fun CollectionDetailUI(
                                 Text(
                                     text = "Total Volume",
                                     fontFamily = FontType.quicksandMedium,
-                                    color = textColor,
+                                    color = darkTextColor,
                                     fontSize = 16.sp,
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis
@@ -296,7 +286,7 @@ fun CollectionDetailUI(
                                     val formattedPrice = PriceFormatterUtil.formatPrice(volume)
                                     Text(
                                         text = "${formattedPrice} ",
-                                        color = textColor,
+                                        color = darkTextColor,
                                         fontSize = 12.sp,
                                         maxLines = 1,
                                         overflow = TextOverflow.Ellipsis
@@ -309,13 +299,6 @@ fun CollectionDetailUI(
                 FlowRow(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(
-                            brush = Brush.linearGradient(
-                                colors = listOf(
-                                    primaryBackgroundColor, secondaryBackgroundColor
-                                )
-                            )
-                        )
                         .padding(horizontal = 8.dp)
                         .padding(top = 8.dp, bottom = 100.dp),
                     maxItemsInEachRow = 2,
@@ -358,8 +341,8 @@ fun AssetsItem(assetsDataItem: AssetsDataItem, onItemClick: () -> Unit) {
             .clickable {
                 onItemClick()
             },
-        elevation = CardDefaults.cardElevation(6.dp),
-        colors = CardDefaults.cardColors(secondaryBackgroundColor)
+        elevation = CardDefaults.cardElevation(10.dp),
+        colors = CardDefaults.cardColors(light)
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -387,7 +370,6 @@ fun AssetsItem(assetsDataItem: AssetsDataItem, onItemClick: () -> Unit) {
             )
             Row(
                 modifier = Modifier
-                    .background(secondaryBackgroundColor)
                     .fillMaxWidth()
                     .wrapContentHeight()
                     .padding(start = 8.dp, top = 4.dp),
@@ -397,7 +379,7 @@ fun AssetsItem(assetsDataItem: AssetsDataItem, onItemClick: () -> Unit) {
                     Text(
                         text = it,
                         fontFamily = FontType.quicksandBold,
-                        color = textColor,
+                        color = darkTextColor,
                         fontSize = 12.sp,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
@@ -423,7 +405,7 @@ fun AssetsItem(assetsDataItem: AssetsDataItem, onItemClick: () -> Unit) {
                         Text(
                             text = "List price",
                             fontFamily = FontType.quicksandMedium,
-                            color = light,
+                            color = darkTextColor,
                             fontSize = 12.sp,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
@@ -438,7 +420,7 @@ fun AssetsItem(assetsDataItem: AssetsDataItem, onItemClick: () -> Unit) {
                             val formattedPrice = PriceFormatterUtil.formatPrice(price)
                             Text(
                                 text = "$formattedPrice $ ",
-                                color = light,
+                                color = darkTextColor,
                                 fontSize = 10.sp,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis
@@ -462,7 +444,7 @@ fun AssetsItem(assetsDataItem: AssetsDataItem, onItemClick: () -> Unit) {
                         Text(
                             text = "Volume",
                             fontFamily = FontType.quicksandMedium,
-                            color = light,
+                            color = darkTextColor,
                             fontSize = 12.sp,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
@@ -478,7 +460,7 @@ fun AssetsItem(assetsDataItem: AssetsDataItem, onItemClick: () -> Unit) {
                             val formattedPrice = PriceFormatterUtil.formatPrice(volume)
                             Text(
                                 text = "${formattedPrice} ",
-                                color = light,
+                                color = darkTextColor,
                                 fontSize = 10.sp,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis

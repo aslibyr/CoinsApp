@@ -45,10 +45,10 @@ import com.app.coins.data.model.DataItem
 import com.app.coins.utils.PriceFormatterUtil
 import com.app.coins.utils.ScreenRoutes
 import com.app.coins.utils.theme.FontType
+import com.app.coins.utils.theme.darkTextColor
 import com.app.coins.utils.theme.light
 import com.app.coins.utils.theme.primaryBackgroundColor
 import com.app.coins.utils.theme.secondaryBackgroundColor
-import com.app.coins.utils.theme.textColor
 
 @Composable
 fun NftCollectionScreen(
@@ -106,8 +106,8 @@ fun NftListItem(nft: DataItem, onItemClick: () -> Unit) {
             .clickable {
                 onItemClick()
             },
-        elevation = CardDefaults.cardElevation(6.dp),
-        colors = CardDefaults.cardColors(secondaryBackgroundColor)
+        elevation = CardDefaults.cardElevation(10.dp),
+        colors = CardDefaults.cardColors(light)
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -135,7 +135,7 @@ fun NftListItem(nft: DataItem, onItemClick: () -> Unit) {
             )
             Row(
                 modifier = Modifier
-                    .background(secondaryBackgroundColor)
+                    .background(light)
                     .fillMaxWidth()
                     .wrapContentHeight()
                     .padding(start = 8.dp, top = 4.dp),
@@ -148,14 +148,14 @@ fun NftListItem(nft: DataItem, onItemClick: () -> Unit) {
                         modifier = Modifier
                             .padding(end = 4.dp)
                             .size(14.dp),
-                        tint = textColor
+                        tint = darkTextColor
                     )
                 }
                 nft.name?.let {
                     Text(
                         text = it,
                         fontFamily = FontType.quicksandBold,
-                        color = textColor,
+                        color = darkTextColor,
                         fontSize = 12.sp,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
@@ -181,7 +181,7 @@ fun NftListItem(nft: DataItem, onItemClick: () -> Unit) {
                         Text(
                             text = "Floor",
                             fontFamily = FontType.quicksandMedium,
-                            color = light,
+                            color = darkTextColor,
                             fontSize = 12.sp,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
@@ -196,7 +196,7 @@ fun NftListItem(nft: DataItem, onItemClick: () -> Unit) {
                             val formattedPrice = PriceFormatterUtil.formatPrice(price)
                             Text(
                                 text = "$formattedPrice $ ",
-                                color = light,
+                                color = darkTextColor,
                                 fontSize = 10.sp,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis
@@ -220,7 +220,7 @@ fun NftListItem(nft: DataItem, onItemClick: () -> Unit) {
                         Text(
                             text = "Volume",
                             fontFamily = FontType.quicksandMedium,
-                            color = light,
+                            color = darkTextColor,
                             fontSize = 12.sp,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
@@ -236,7 +236,7 @@ fun NftListItem(nft: DataItem, onItemClick: () -> Unit) {
                             val formattedPrice = PriceFormatterUtil.formatPrice(volume)
                             Text(
                                 text = "${formattedPrice} ",
-                                color = light,
+                                color = darkTextColor,
                                 fontSize = 10.sp,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis

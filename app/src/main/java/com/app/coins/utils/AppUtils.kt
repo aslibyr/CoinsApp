@@ -13,6 +13,10 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
 import androidx.core.content.ContextCompat
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 
 fun Context.loadJSONFromAssets(fileName: String): String {
@@ -91,5 +95,32 @@ object PriceFormatterUtil {
     private fun withZeroFormatPrice(price: String): String {
         val dec = DecimalFormat("0.####")
         return dec.format(price.toDouble())
+    }
+}
+
+object DateFormatter {
+    private val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
+    private val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+
+    fun format(timestamp: Long): String {
+        val date = Date(timestamp)
+        val now = System.currentTimeMillis()
+
+        return if (isToday(timestamp, now)) {
+            timeFormat.format(date)
+        } else {
+            dateFormat.format(date)
+        }
+    }
+
+    private fun isToday(timestamp: Long, now: Long): Boolean {
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = timestamp
+        val day = calendar.get(Calendar.DAY_OF_YEAR)
+
+        calendar.timeInMillis = now
+        val today = calendar.get(Calendar.DAY_OF_YEAR)
+
+        return day == today
     }
 }
