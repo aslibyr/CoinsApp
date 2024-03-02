@@ -133,7 +133,6 @@ fun CollectionDetailUI(
             AsyncImage(
                 modifier = Modifier
                     .clip(RoundedCornerShape(60.dp))
-                    .shadow(30.dp)
                     .height(100.dp)
                     .width(100.dp),
                 model = nft.img,
@@ -335,12 +334,12 @@ fun AssetsItem(assetsDataItem: AssetsDataItem, onItemClick: () -> Unit) {
     val configuration = LocalConfiguration.current
     Card(
         modifier = Modifier
-            .clip(RoundedCornerShape(20.dp))
             .widthPercent(0.45f, configuration)
             .height(250.dp)
             .clickable {
                 onItemClick()
             },
+        shape = RoundedCornerShape(20.dp),
         elevation = CardDefaults.cardElevation(10.dp),
         colors = CardDefaults.cardColors(light)
     ) {
@@ -351,6 +350,7 @@ fun AssetsItem(assetsDataItem: AssetsDataItem, onItemClick: () -> Unit) {
             SubcomposeAsyncImage(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .shadow(3.dp)
                     .height(180.dp),
                 model = assetsDataItem.url,
                 contentDescription = "",

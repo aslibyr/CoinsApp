@@ -21,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -82,32 +83,40 @@ fun NewsItem(news: ResultItem, onItemClick: () -> Unit) {
             .padding(8.dp)
             .clickable { onItemClick() },
         elevation = CardDefaults.cardElevation(5.dp),
-        shape = RoundedCornerShape(10.dp),
+        shape = RoundedCornerShape(15.dp),
         colors = CardDefaults.cardColors(containerColor = light)
 
     ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.padding(8.dp)
+            verticalArrangement = Arrangement.Center
         ) {
             news.imgUrl?.let { imageUrl ->
                 AsyncImage(
                     modifier = Modifier
-                        .fillMaxWidth()
+                        .fillMaxSize()
                         .height(230.dp)
+                        .shadow(3.dp)
                         .clip(shape = RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp)),
                     model = imageUrl, contentDescription = "", placeholder = painterResource(
                         id = R.drawable.error
                     ), error = painterResource(id = R.drawable.error),
-                    contentScale = ContentScale.FillWidth
+                    contentScale = ContentScale.Crop
                 )
             }
-            news.title?.let { Text(text = it, color = darkTextColor) }
+            news.title?.let {
+                Text(
+                    text = it,
+                    color = darkTextColor,
+                    modifier = Modifier
+                        .padding(horizontal = 8.dp)
+                        .padding(top = 4.dp)
+                )
+            }
         }
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp),
+                .padding(end = 8.dp, bottom = 8.dp),
             horizontalArrangement = Arrangement.End
         ) {
             news.feedDate?.let { timestamp ->

@@ -99,7 +99,7 @@ object PriceFormatterUtil {
 }
 
 object DateFormatter {
-    private val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
+    private val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
     private val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
 
     fun format(timestamp: Long): String {

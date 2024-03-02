@@ -31,7 +31,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
@@ -169,12 +168,12 @@ fun CryptoScreen(
 fun CryptoListItem(coin: CryptoUIModel, onItemClick: () -> Unit) {
     Card(
         modifier = Modifier
-            .clip(RoundedCornerShape(30.dp))
             .fillMaxWidth()
             .height(60.dp)
             .clickable {
                 onItemClick()
             },
+        shape = RoundedCornerShape(30.dp),
         elevation = CardDefaults.cardElevation(6.dp)
     ) {
         Row(

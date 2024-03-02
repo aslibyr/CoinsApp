@@ -29,7 +29,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -100,12 +99,12 @@ fun NftCollectionScreen(
 fun NftListItem(nft: DataItem, onItemClick: () -> Unit) {
     Card(
         modifier = Modifier
-            .clip(RoundedCornerShape(20.dp))
             .fillMaxWidth()
             .height(250.dp)
             .clickable {
                 onItemClick()
             },
+        shape = RoundedCornerShape(20.dp),
         elevation = CardDefaults.cardElevation(10.dp),
         colors = CardDefaults.cardColors(light)
     ) {
@@ -133,9 +132,9 @@ fun NftListItem(nft: DataItem, onItemClick: () -> Unit) {
                 },
                 contentScale = ContentScale.Crop
             )
+
             Row(
                 modifier = Modifier
-                    .background(light)
                     .fillMaxWidth()
                     .wrapContentHeight()
                     .padding(start = 8.dp, top = 4.dp),
@@ -154,7 +153,7 @@ fun NftListItem(nft: DataItem, onItemClick: () -> Unit) {
                 nft.name?.let {
                     Text(
                         text = it,
-                        fontFamily = FontType.quicksandBold,
+                        fontFamily = FontType.quicksandMedium,
                         color = darkTextColor,
                         fontSize = 12.sp,
                         maxLines = 1,
