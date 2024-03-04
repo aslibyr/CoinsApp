@@ -15,8 +15,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Verified
@@ -37,9 +37,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.SubcomposeAsyncImage
 import com.app.coins.R
-import com.app.coins.custom.loading.LoadingDialog
 import com.app.coins.data.model.DataItem
 import com.app.coins.utils.PriceFormatterUtil
 import com.app.coins.utils.ScreenRoutes
@@ -55,8 +57,11 @@ fun NftCollectionScreen(
     nftClicked: (String) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val nftPagingItems: LazyPagingItems<DataItem> =
+        viewModel.nfts.collectAsLazyPagingItems()
+
     if (uiState.isLoading) {
-        LoadingDialog()
+        // LoadingDialog()
     }
 
     Box(
@@ -77,16 +82,43 @@ fun NftCollectionScreen(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             columns = GridCells.Fixed(2)
         ) {
-            uiState.nftData?.data?.let { list ->
-                items(list) { item ->
-                    if (item != null) {
-                        NftListItem(nft = item, onItemClick = {
-                            val route = ScreenRoutes.COLLECTION_DETAIL_SCREEN_ROUTE.replace(
-                                oldValue = "{collectionAddress}",
-                                newValue = item.address.toString()
-                            )
-                            nftClicked(route)
-                        })
+            items(nftPagingItems.itemCount) {
+                NftListItem(nft = nftPagingItems[it]!!, onItemClick = {
+                    val route = ScreenRoutes.COLLECTION_DETAIL_SCREEN_ROUTE.replace(
+                        oldValue = "{collectionAddress}",
+                        newValue = nftPagingItems[it]?.address.toString()
+                    )
+                    nftClicked(route)
+                })
+            }
+            item(span = {
+                GridItemSpan(maxCurrentLineSpan)
+            }) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(150.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    if (uiState.isLoading) {
+                        CircularProgressIndicator()
+                    }
+                }
+            }
+            nftPagingItems.apply {
+                when {
+                    loadState.refresh is LoadState.Loading -> {
+                        viewModel.changedLoadingState(true)
+                    }
+
+                    loadState.append is LoadState.Loading -> {
+                        viewModel.changedLoadingState(true)
+                    }
+
+                    loadState.append is LoadState.Error -> {}
+                    loadState.append is LoadState.NotLoading -> {
+                        viewModel.changedLoadingState(false)
                     }
                 }
             }

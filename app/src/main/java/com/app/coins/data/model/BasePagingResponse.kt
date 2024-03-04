@@ -5,6 +5,11 @@ data class BasePagingResponse<T>(
     val meta: Meta
 )
 
+data class NftPagingResponse<T>(
+    val data: List<T>,
+    val meta: Meta
+)
+
 data class Meta(
     val page: Int,
     val limit: Int = 20,

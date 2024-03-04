@@ -2,16 +2,18 @@ package com.app.coins.ui.nft
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import com.app.coins.data.model.DataItem
 import com.app.coins.data.model.NftCollectionResponse
+import com.app.coins.data.paging.NftPagingSource
 import com.app.coins.data.remote.webservice.WebService
-import com.app.coins.utils.ResultWrapper
-import com.app.coins.utils.safeApiCall
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,42 +25,12 @@ class NftCollectionScreenViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(NftUIStateModel())
     val uiState = _uiState.asStateFlow()
+    val nfts: Flow<PagingData<DataItem>> = Pager(PagingConfig(pageSize = 20)) {
+        NftPagingSource(webService)
+    }.flow.cachedIn(viewModelScope)
 
-
-    init {
-        getNftCollections()
-    }
-
-
-    private fun getNftCollections() {
-        viewModelScope.launch {
-            when (val response = safeApiCall(Dispatchers.IO) { webService.getNftCollections() }) {
-                is ResultWrapper.Success -> {
-                    val nftResponse = response.value
-                    _uiState.update {
-                        it.copy(nftData = nftResponse, isLoading = false)
-                    }
-                }
-                // Handle other result types
-                is ResultWrapper.GenericError -> {
-                    _uiState.update {
-                        it.copy(errorMessage = response.error.toString())
-                    }
-                }
-
-                ResultWrapper.Loading -> {
-                    _uiState.update {
-                        it.copy(isLoading = true)
-                    }
-                }
-
-                ResultWrapper.NetworkError -> {
-                    _uiState.update {
-                        it.copy(errorMessage = "İnternet bağlantınızı kontrol edin.")
-                    }
-                }
-            }
-        }
+    fun changedLoadingState(isLoading: Boolean) {
+        _uiState.value = _uiState.value.copy(isLoading = isLoading)
     }
 }
 

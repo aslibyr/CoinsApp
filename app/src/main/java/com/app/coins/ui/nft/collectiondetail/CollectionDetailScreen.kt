@@ -47,6 +47,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import coil.compose.SubcomposeAsyncImage
 import com.app.coins.R
@@ -67,6 +69,8 @@ fun CollectionDetailScreen(
     viewModel: CollectionDetailScreenViewModel = hiltViewModel(), onBackClick: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val assetsPagingItems: LazyPagingItems<AssetsDataItem> =
+        viewModel.assets.collectAsLazyPagingItems()
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -88,10 +92,8 @@ fun CollectionDetailScreen(
 
             ) {
                 uiState.collectionData?.let { collectionData ->
-                    uiState.assetsData?.let { assetsData ->
-                        CollectionDetailUI(nft = collectionData, asset = assetsData.data) {
-                            onBackClick()
-                        }
+                    CollectionDetailUI(nft = collectionData, asset = assetsPagingItems) {
+                        onBackClick()
                     }
                 }
             }
@@ -103,7 +105,7 @@ fun CollectionDetailScreen(
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun CollectionDetailUI(
-    nft: CollectionDetailResponse, asset: List<AssetsDataItem?>?, onBackClick: () -> Unit
+    nft: CollectionDetailResponse, asset: LazyPagingItems<AssetsDataItem>, onBackClick: () -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -304,11 +306,11 @@ fun CollectionDetailUI(
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    asset?.let { assetsDataItems ->
-                        assetsDataItems.forEach { assetsDataItem ->
-                            assetsDataItem?.let {
-                                AssetsItem(assetsDataItem = it) {
-                                }
+                    val count = 1..asset.itemCount
+                    repeat(count.count()) {
+                        asset[it]?.let { it1 ->
+                            AssetsItem(assetsDataItem = it1) {
+
                             }
                         }
                     }

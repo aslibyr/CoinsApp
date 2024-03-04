@@ -20,5 +20,4 @@ class CoinPagingDataSource @Inject constructor(private val webService: WebServic
         pagingSourceFactory = { CoinsPagingSource(webService = webService, query = query) }
     ).flow
 
-
 }

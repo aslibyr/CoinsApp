@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -28,6 +27,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import com.app.coins.R
 import com.app.coins.custom.loading.LoadingDialog
@@ -45,6 +47,8 @@ fun NewsScreen(
     viewModel: NewsScreenViewModel = hiltViewModel(), newsClicked: (String) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val newsPagingItems: LazyPagingItems<ResultItem> =
+        viewModel.news.collectAsLazyPagingItems()
 
     if (uiState.isLoading) {
         LoadingDialog()
@@ -61,17 +65,39 @@ fun NewsScreen(
                 )
             ), horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        uiState.newsData?.result?.let { list ->
-            items(list.filterNotNull()) { item ->
-                NewsItem(news = item, onItemClick = {
-                    val route = ScreenRoutes.NEWS_DETAIL_SCREEN_ROUTE.replace(
-                        oldValue = "{id}",
-                        newValue = item.id.toString()
-                    )
-                    newsClicked(route)
-                })
+
+        items(newsPagingItems.itemCount) {
+            NewsItem(news = newsPagingItems[it]!!, onItemClick = {
+                val route = ScreenRoutes.NEWS_DETAIL_SCREEN_ROUTE.replace(
+                    oldValue = "{id}",
+                    newValue = newsPagingItems[it]?.id.toString()
+                )
+                newsClicked(route)
+            })
+        }
+
+        newsPagingItems.apply {
+            when {
+                loadState.refresh is LoadState.Loading -> {
+                    viewModel.changedLoadingState(true)
+                    //You can add modifier to manage load state when first time response page is loading
+                }
+
+                loadState.append is LoadState.Loading -> {
+                    //You can add modifier to manage load state when next response page is loading
+                    viewModel.changedLoadingState(true)
+                }
+
+                loadState.append is LoadState.Error -> {
+                    //You can use modifier to show error message
+                }
+
+                loadState.append is LoadState.NotLoading -> {
+                    viewModel.changedLoadingState(false)
+                }
             }
         }
+
     }
 }
 

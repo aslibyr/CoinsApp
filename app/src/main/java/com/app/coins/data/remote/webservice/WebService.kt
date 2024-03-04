@@ -1,13 +1,14 @@
 package com.app.coins.data.remote.webservice
 
+import com.app.coins.data.model.AssetsDataItem
 import com.app.coins.data.model.BasePagingResponse
 import com.app.coins.data.model.ChartsResponse
-import com.app.coins.data.model.CollectionAssetsResponse
 import com.app.coins.data.model.CollectionDetailResponse
 import com.app.coins.data.model.CryptoResponse
+import com.app.coins.data.model.DataItem
 import com.app.coins.data.model.NewsDetailResponse
-import com.app.coins.data.model.NewsResponse
-import com.app.coins.data.model.NftCollectionResponse
+import com.app.coins.data.model.NftPagingResponse
+import com.app.coins.data.model.ResultItem
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -34,8 +35,9 @@ interface WebService {
 
     @GET("nft/trending")
     suspend fun getNftCollections(
-        @Query("limit") limit: Int = 100
-    ): NftCollectionResponse
+        @Query("limit") limit: Int,
+        @Query("page") page: Int,
+    ): NftPagingResponse<DataItem>
 
     @GET("nft/collection/{collectionAddress}")
     suspend fun getNftCollectionDetails(
@@ -45,13 +47,15 @@ interface WebService {
     @GET("nft/{collectionAddress}/assets")
     suspend fun getNftCollectionAssets(
         @Path("collectionAddress") collectionAddress: String,
-        @Query("limit") limit: Int = 100
-    ): CollectionAssetsResponse
+        @Query("limit") limit: Int,
+        @Query("page") page: Int,
+    ): NftPagingResponse<AssetsDataItem>
 
     @GET("news")
     suspend fun getNews(
-        @Query("limit") limit: Int = 100
-    ): NewsResponse
+        @Query("limit") limit: Int,
+        @Query("page") page: Int,
+    ): BasePagingResponse<ResultItem>
 
     @GET("news/{id}")
     suspend fun getNewsDetails(
