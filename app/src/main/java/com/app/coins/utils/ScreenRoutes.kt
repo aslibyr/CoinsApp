@@ -6,7 +6,6 @@ object ScreenRoutes {
     const val NFT_HOST_ROUTE = "nft_host_route"
     const val NFT_SCREEN_ROUTE = "nft_screen"
     const val COLLECTION_DETAIL_SCREEN_ROUTE = "collection_detail_screen_route/{collectionAddress}"
-    const val MORE_SCREEN_ROUTE = "more_screen_route"
     const val CRYPTO_DETAIL_SCREEN_ROUTE = "crypto_detail_screen_route/{id}"
     const val CRYPTO_HOST_ROUTE = "crypto_host_route"
     const val NEWS_HOST_ROUTE = "news_host_route"

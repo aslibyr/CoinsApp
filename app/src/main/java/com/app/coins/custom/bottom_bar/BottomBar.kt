@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Image
-import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material.icons.filled.Newspaper
 import androidx.compose.material.icons.outlined.MonetizationOn
 import androidx.compose.material3.Icon
@@ -75,11 +74,6 @@ fun BottomBar(
             title = "News",
             icon = Icons.Filled.Newspaper,
             route = ScreenRoutes.NEWS_HOST_ROUTE
-        ),
-        BottomNavigationItem(
-            title = "More",
-            icon = Icons.Filled.MoreHoriz,
-            route = ScreenRoutes.MORE_SCREEN_ROUTE
         )
     )
 

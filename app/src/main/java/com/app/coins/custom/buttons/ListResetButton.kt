@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material3.Card
@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.app.coins.utils.theme.secondaryBackgroundColor
 
 
 @Composable
@@ -26,21 +27,19 @@ fun BoxScope.ListResetButton(
     onClick: () -> Unit
 ) {
     Card(
-        shape = RoundedCornerShape(
-            30.dp
-        ),
+        shape = CircleShape,
         modifier = Modifier
             .width(60.dp)
             .height(60.dp)
-            .padding(end = 16.dp, bottom = 100.dp)
-            .align(Alignment.BottomEnd)
+            .padding(end = 16.dp)
+            .align(Alignment.CenterEnd)
             .fillMaxSize()
             .clickable {
                 // Kullanıcı düğmeye bastığında listenin en üstüne kaydırma işlemi
                 onClick.invoke()
             },
         elevation = CardDefaults.cardElevation(10.dp),
-        colors = CardDefaults.cardColors(Color.Green)
+        colors = CardDefaults.cardColors(secondaryBackgroundColor)
     ) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             Icon(

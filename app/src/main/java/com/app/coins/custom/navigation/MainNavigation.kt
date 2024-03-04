@@ -5,11 +5,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import com.app.coins.custom.navigation.graphs.cryptoGraph
 import com.app.coins.custom.navigation.graphs.newsGraph
 import com.app.coins.custom.navigation.graphs.nftGraph
-import com.app.coins.ui.more.MoreScreen
 import com.app.coins.utils.ScreenRoutes
 
 @Composable
@@ -30,11 +28,6 @@ fun MainNavigation(
 
         newsGraph(navController, shouldBottomBarVisible = {})
 
-        composable(
-            route = ScreenRoutes.MORE_SCREEN_ROUTE
-        ) {
-            MoreScreen()
-        }
 
     }
 }

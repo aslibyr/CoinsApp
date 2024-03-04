@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,9 +15,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.NavigateBefore
 import androidx.compose.material.icons.filled.Verified
@@ -29,7 +30,10 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
@@ -52,6 +56,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import coil.compose.SubcomposeAsyncImage
 import com.app.coins.R
+import com.app.coins.custom.buttons.ListResetButton
 import com.app.coins.custom.loading.LoadingDialog
 import com.app.coins.data.model.AssetsDataItem
 import com.app.coins.data.model.CollectionDetailResponse
@@ -63,6 +68,7 @@ import com.app.coins.utils.theme.primaryBackgroundColor
 import com.app.coins.utils.theme.secondaryBackgroundColor
 import com.app.coins.utils.theme.textColor
 import com.app.coins.utils.widthPercent
+import kotlinx.coroutines.launch
 
 @Composable
 fun CollectionDetailScreen(
@@ -107,213 +113,233 @@ fun CollectionDetailScreen(
 fun CollectionDetailUI(
     nft: CollectionDetailResponse, asset: LazyPagingItems<AssetsDataItem>, onBackClick: () -> Unit
 ) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-    ) {
-        AsyncImage(
-            modifier = Modifier
-                .height(230.dp)
-                .fillMaxWidth()
-                .blur(2.dp),
-            model = nft.bannerImg,
-            contentDescription = "",
-            placeholder = painterResource(
-                id = R.drawable.error
-            ),
-            contentScale = ContentScale.Crop
-        )
+    val scope = rememberCoroutineScope()
+    val listState = rememberLazyGridState()
+    val showButton by remember {
+        derivedStateOf {
+            listState.firstVisibleItemIndex >= 5
+        }
+    }
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 32.dp)
-                .background(Color.Transparent),
-            horizontalAlignment = Alignment.CenterHorizontally
+    Box(modifier = Modifier.fillMaxSize()) {
+
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            modifier = Modifier.fillMaxSize(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            state = listState
         ) {
-            AsyncImage(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(60.dp))
-                    .height(100.dp)
-                    .width(100.dp),
-                model = nft.img,
-                contentDescription = "",
-                placeholder = painterResource(
-                    id = R.drawable.error
-                ),
-                error = painterResource(id = R.drawable.error)
-            )
-
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(top = 16.dp)
-                    .clip(RoundedCornerShape(topStart = 60.dp, topEnd = 60.dp))
-                    .background(
-                        brush = Brush.linearGradient(
-                            colors = listOf(
-                                primaryBackgroundColor, secondaryBackgroundColor
-                            )
-                        )
-                    ), horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-
-                Column(
-                    modifier = Modifier,
-                    horizontalAlignment = Alignment.CenterHorizontally
+            item(span = {
+                GridItemSpan(maxCurrentLineSpan)
+            }) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
                 ) {
-
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        nft.name?.let {
-                            Text(
-                                text = it,
-                                color = darkTextColor,
-                                fontSize = 20.sp,
-                                fontFamily = FontType.quicksandBold
-                            )
-                        }
-                        if (nft.verified == true) {
-                            Icon(
-                                Icons.Filled.Verified,
-                                contentDescription = "Verified",
-                                modifier = Modifier.size(20.dp),
-                                tint = darkTextColor
-                            )
-                        }
-                    }
-
-                    Row(
-                        modifier = Modifier.padding(top = 8.dp),
-                        horizontalArrangement = Arrangement.spacedBy(12.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            imageVector = Icons.Outlined.Language,
-                            contentDescription = "",
-                            tint = darkTextColor,
-                            modifier = Modifier.size(32.dp)
-                        )
-                        Icon(
-                            imageVector = ImageVector.vectorResource(id = R.drawable.twitter_icon),
-                            contentDescription = "",
-                            tint = darkTextColor,
-                            modifier = Modifier.size(32.dp)
-                        )
-                        Icon(
-                            imageVector = ImageVector.vectorResource(id = R.drawable.discord_icon),
-                            contentDescription = "",
-                            tint = darkTextColor,
-                            modifier = Modifier.size(32.dp)
-                        )
-                    }
-
-                    Row(
+                    AsyncImage(
                         modifier = Modifier
+                            .height(230.dp)
                             .fillMaxWidth()
-                            .padding(top = 4.dp, bottom = 8.dp)
+                            .blur(2.dp),
+                        model = nft.bannerImg,
+                        contentDescription = "",
+                        placeholder = painterResource(
+                            id = R.drawable.error
+                        ),
+                        contentScale = ContentScale.Crop
+                    )
+
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(top = 32.dp)
+                            .background(Color.Transparent),
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
+                        AsyncImage(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(60.dp))
+                                .height(100.dp)
+                                .width(100.dp),
+                            model = nft.img,
+                            contentDescription = "",
+                            placeholder = painterResource(
+                                id = R.drawable.error
+                            ),
+                            error = painterResource(id = R.drawable.error)
+                        )
 
                         Column(
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .weight(1f)
-                                .padding(start = 8.dp)
+                                .fillMaxSize()
+                                .padding(top = 16.dp)
+                                .clip(RoundedCornerShape(topStart = 60.dp, topEnd = 60.dp))
+                                .background(
+                                    brush = Brush.linearGradient(
+                                        colors = listOf(
+                                            primaryBackgroundColor, secondaryBackgroundColor
+                                        )
+                                    )
+                                ), horizontalAlignment = Alignment.CenterHorizontally
                         ) {
 
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically
+                            Column(
+                                modifier = Modifier,
+                                horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                Text(
-                                    text = "Floor Price",
-                                    fontFamily = FontType.quicksandMedium,
-                                    color = darkTextColor,
-                                    fontSize = 16.sp,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis
-                                )
-                            }
 
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                nft.floorPriceUsd?.toString()?.let { price ->
-                                    val formattedPrice = PriceFormatterUtil.formatPrice(price)
-                                    Text(
-                                        text = "$formattedPrice $ ",
-                                        color = darkTextColor,
-                                        fontSize = 12.sp,
-                                        maxLines = 1,
-                                        overflow = TextOverflow.Ellipsis
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                ) {
+                                    nft.name?.let {
+                                        Text(
+                                            text = it,
+                                            color = darkTextColor,
+                                            fontSize = 20.sp,
+                                            fontFamily = FontType.quicksandBold
+                                        )
+                                    }
+                                    if (nft.verified == true) {
+                                        Icon(
+                                            Icons.Filled.Verified,
+                                            contentDescription = "Verified",
+                                            modifier = Modifier.size(20.dp),
+                                            tint = darkTextColor
+                                        )
+                                    }
+                                }
+
+                                Row(
+                                    modifier = Modifier.padding(top = 8.dp),
+                                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Outlined.Language,
+                                        contentDescription = "",
+                                        tint = darkTextColor,
+                                        modifier = Modifier.size(32.dp)
+                                    )
+                                    Icon(
+                                        imageVector = ImageVector.vectorResource(id = R.drawable.twitter_icon),
+                                        contentDescription = "",
+                                        tint = darkTextColor,
+                                        modifier = Modifier.size(32.dp)
+                                    )
+                                    Icon(
+                                        imageVector = ImageVector.vectorResource(id = R.drawable.discord_icon),
+                                        contentDescription = "",
+                                        tint = darkTextColor,
+                                        modifier = Modifier.size(32.dp)
                                     )
                                 }
-                            }
-                        }
 
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(end = 8.dp)
-                                .weight(1f),
-                            horizontalAlignment = Alignment.End
-                        ) {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(top = 4.dp, bottom = 8.dp)
+                                ) {
 
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.End
-                            ) {
-                                Text(
-                                    text = "Total Volume",
-                                    fontFamily = FontType.quicksandMedium,
-                                    color = darkTextColor,
-                                    fontSize = 16.sp,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis
-                                )
-                            }
+                                    Column(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .weight(1f)
+                                            .padding(start = 8.dp)
+                                    ) {
 
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.End
-                            ) {
-                                nft.totalVolume?.toString()?.let { volume ->
-                                    val formattedPrice = PriceFormatterUtil.formatPrice(volume)
-                                    Text(
-                                        text = "${formattedPrice} ",
-                                        color = darkTextColor,
-                                        fontSize = 12.sp,
-                                        maxLines = 1,
-                                        overflow = TextOverflow.Ellipsis
-                                    )
+                                        Row(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+                                            Text(
+                                                text = "Floor Price",
+                                                fontFamily = FontType.quicksandMedium,
+                                                color = darkTextColor,
+                                                fontSize = 16.sp,
+                                                maxLines = 1,
+                                                overflow = TextOverflow.Ellipsis
+                                            )
+                                        }
+
+                                        Row(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+                                            nft.floorPriceUsd?.toString()?.let { price ->
+                                                val formattedPrice =
+                                                    PriceFormatterUtil.formatPrice(price)
+                                                Text(
+                                                    text = "$formattedPrice $ ",
+                                                    color = darkTextColor,
+                                                    fontSize = 12.sp,
+                                                    maxLines = 1,
+                                                    overflow = TextOverflow.Ellipsis
+                                                )
+                                            }
+                                        }
+                                    }
+
+                                    Column(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(end = 8.dp)
+                                            .weight(1f),
+                                        horizontalAlignment = Alignment.End
+                                    ) {
+
+                                        Row(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            verticalAlignment = Alignment.CenterVertically,
+                                            horizontalArrangement = Arrangement.End
+                                        ) {
+                                            Text(
+                                                text = "Total Volume",
+                                                fontFamily = FontType.quicksandMedium,
+                                                color = darkTextColor,
+                                                fontSize = 16.sp,
+                                                maxLines = 1,
+                                                overflow = TextOverflow.Ellipsis
+                                            )
+                                        }
+
+                                        Row(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            verticalAlignment = Alignment.CenterVertically,
+                                            horizontalArrangement = Arrangement.End
+                                        ) {
+                                            nft.totalVolume?.toString()?.let { volume ->
+                                                val formattedPrice =
+                                                    PriceFormatterUtil.formatPrice(volume)
+                                                Text(
+                                                    text = "${formattedPrice} ",
+                                                    color = darkTextColor,
+                                                    fontSize = 12.sp,
+                                                    maxLines = 1,
+                                                    overflow = TextOverflow.Ellipsis
+                                                )
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
                     }
                 }
-                FlowRow(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 8.dp)
-                        .padding(top = 8.dp, bottom = 100.dp),
-                    maxItemsInEachRow = 2,
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    val count = 1..asset.itemCount
-                    repeat(count.count()) {
-                        asset[it]?.let { it1 ->
-                            AssetsItem(assetsDataItem = it1) {
+            }
+            items(asset.itemCount) {
+                asset[it]?.let { it1 ->
+                    AssetsItem(assetsDataItem = it1) {
 
-                            }
-                        }
                     }
+                }
+            }
+        }
+        if (showButton) {
+            ListResetButton {
+                scope.launch {
+                    listState.animateScrollToItem(0)
                 }
             }
         }
