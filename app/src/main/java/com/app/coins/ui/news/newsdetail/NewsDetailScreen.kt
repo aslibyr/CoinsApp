@@ -112,34 +112,35 @@ fun NewsDetailUI(news: NewsDetailResponse, onBackClick: () -> Unit) {
                 .clip(RoundedCornerShape(topStart = 40.dp, topEnd = 40.dp))
                 .background(light)
         ) {
-            Row(modifier = Modifier.padding(10.dp)) {
-                news.title?.let {
-                    Text(
-                        text = it,
-                        fontSize = 16.sp,
-                        fontFamily = FontType.quicksandBold,
-                        color = darkTextColor
-                    )
+            Column(modifier = Modifier.background(primaryBackgroundColor)) {
+                Row(modifier = Modifier.padding(10.dp)) {
+                    news.title?.let {
+                        Text(
+                            text = it,
+                            fontSize = 16.sp,
+                            fontFamily = FontType.quicksandBold,
+                            color = darkTextColor
+                        )
+                    }
+                }
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(end = 8.dp, bottom = 8.dp),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    news.feedDate?.let { timestamp ->
+                        val formattedDate = DateFormatter.format(timestamp)
+                        Text(
+                            text = formattedDate,
+                            fontFamily = FontType.quicksandLight,
+                            fontSize = 14.sp,
+                            color = darkTextColor
+                        )
+                    }
                 }
             }
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(end = 8.dp, bottom = 8.dp),
-                horizontalArrangement = Arrangement.End
-            ) {
-                news.feedDate?.let { timestamp ->
-                    val formattedDate = DateFormatter.format(timestamp)
-
-                    Text(
-                        text = formattedDate,
-                        fontFamily = FontType.quicksandLight,
-                        fontSize = 14.sp
-                    )
-                }
-            }
-
             Row(modifier = Modifier.padding(8.dp)) {
                 news.description?.let {
                     Text(

@@ -60,9 +60,6 @@ fun NftCollectionScreen(
     val nftPagingItems: LazyPagingItems<DataItem> =
         viewModel.nfts.collectAsLazyPagingItems()
 
-    if (uiState.isLoading) {
-        // LoadingDialog()
-    }
 
     Box(
         modifier = Modifier

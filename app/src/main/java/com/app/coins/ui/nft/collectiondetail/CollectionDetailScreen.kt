@@ -1,12 +1,14 @@
 package com.app.coins.ui.nft.collectiondetail
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -44,6 +46,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -93,8 +96,7 @@ fun CollectionDetailScreen(
         }
         if (uiState.isSuccess) {
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
+                modifier = Modifier.fillMaxSize()
 
             ) {
                 uiState.collectionData?.let { collectionData ->
@@ -108,7 +110,6 @@ fun CollectionDetailScreen(
 }
 
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun CollectionDetailUI(
     nft: CollectionDetailResponse, asset: LazyPagingItems<AssetsDataItem>, onBackClick: () -> Unit
@@ -120,6 +121,7 @@ fun CollectionDetailUI(
             listState.firstVisibleItemIndex >= 5
         }
     }
+    val context = LocalContext.current
 
     Box(modifier = Modifier.fillMaxSize()) {
 
@@ -134,8 +136,7 @@ fun CollectionDetailUI(
                 GridItemSpan(maxCurrentLineSpan)
             }) {
                 Box(
-                    modifier = Modifier
-                        .fillMaxSize()
+                    modifier = Modifier.fillMaxSize()
                 ) {
                     AsyncImage(
                         modifier = Modifier
@@ -211,29 +212,59 @@ fun CollectionDetailUI(
                                     }
                                 }
 
+                                fun openUrl(context: Context, url: String) {
+                                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                                    context.startActivity(intent)
+                                }
                                 Row(
                                     modifier = Modifier.padding(top = 8.dp),
-                                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                                    horizontalArrangement = Arrangement.spacedBy(16.dp),
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    Icon(
-                                        imageVector = Icons.Outlined.Language,
-                                        contentDescription = "",
-                                        tint = darkTextColor,
-                                        modifier = Modifier.size(32.dp)
-                                    )
-                                    Icon(
-                                        imageVector = ImageVector.vectorResource(id = R.drawable.twitter_icon),
-                                        contentDescription = "",
-                                        tint = darkTextColor,
-                                        modifier = Modifier.size(32.dp)
-                                    )
-                                    Icon(
-                                        imageVector = ImageVector.vectorResource(id = R.drawable.discord_icon),
-                                        contentDescription = "",
-                                        tint = darkTextColor,
-                                        modifier = Modifier.size(32.dp)
-                                    )
+                                    nft.relevantUrls?.forEach {
+                                        if (it?.name == "Discord") {
+                                            Icon(imageVector = ImageVector.vectorResource(id = R.drawable.discord_icon),
+                                                contentDescription = "",
+                                                tint = darkTextColor,
+                                                modifier = Modifier
+                                                    .size(32.dp)
+                                                    .clickable {
+                                                        it.url?.let { discordUrl ->
+                                                            openUrl(
+                                                                context, discordUrl
+                                                            )
+                                                        }
+                                                    })
+                                        }
+                                        if (it?.name == "Twitter") {
+                                            Icon(imageVector = ImageVector.vectorResource(id = R.drawable.twitter_icon),
+                                                contentDescription = "",
+                                                tint = darkTextColor,
+                                                modifier = Modifier
+                                                    .size(32.dp)
+                                                    .clickable {
+                                                        it.url?.let { twitterUrl ->
+                                                            openUrl(
+                                                                context, twitterUrl
+                                                            )
+                                                        }
+                                                    })
+                                        }
+                                        if (it?.name == "Website") {
+                                            Icon(imageVector = Icons.Outlined.Language,
+                                                contentDescription = "",
+                                                tint = darkTextColor,
+                                                modifier = Modifier
+                                                    .size(32.dp)
+                                                    .clickable {
+                                                        it.url?.let { webUrl ->
+                                                            openUrl(
+                                                                context, webUrl
+                                                            )
+                                                        }
+                                                    })
+                                        }
+                                    }
                                 }
 
                                 Row(
@@ -285,8 +316,7 @@ fun CollectionDetailUI(
                                         modifier = Modifier
                                             .fillMaxWidth()
                                             .padding(end = 8.dp)
-                                            .weight(1f),
-                                        horizontalAlignment = Alignment.End
+                                            .weight(1f), horizontalAlignment = Alignment.End
                                     ) {
 
                                         Row(
@@ -387,8 +417,7 @@ fun AssetsItem(assetsDataItem: AssetsDataItem, onItemClick: () -> Unit) {
                 },
                 error = {
                     Image(
-                        modifier = Modifier
-                            .fillMaxSize(),
+                        modifier = Modifier.fillMaxSize(),
                         contentScale = ContentScale.Crop,
                         painter = painterResource(id = R.drawable.error),
                         contentDescription = ""
