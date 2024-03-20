@@ -1,8 +1,5 @@
 package com.app.coins.ui.nft.collectiondetail
 
-import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -42,7 +39,6 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
@@ -64,6 +60,7 @@ import com.app.coins.custom.loading.LoadingDialog
 import com.app.coins.data.model.AssetsDataItem
 import com.app.coins.data.model.CollectionDetailResponse
 import com.app.coins.utils.PriceFormatterUtil
+import com.app.coins.utils.openChrome
 import com.app.coins.utils.theme.FontType
 import com.app.coins.utils.theme.darkTextColor
 import com.app.coins.utils.theme.light
@@ -154,8 +151,7 @@ fun CollectionDetailUI(
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(top = 32.dp)
-                            .background(Color.Transparent),
+                            .padding(top = 32.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         AsyncImage(
@@ -176,13 +172,8 @@ fun CollectionDetailUI(
                                 .fillMaxSize()
                                 .padding(top = 16.dp)
                                 .clip(RoundedCornerShape(topStart = 60.dp, topEnd = 60.dp))
-                                .background(
-                                    brush = Brush.linearGradient(
-                                        colors = listOf(
-                                            primaryBackgroundColor, secondaryBackgroundColor
-                                        )
-                                    )
-                                ), horizontalAlignment = Alignment.CenterHorizontally
+                                .background(primaryBackgroundColor),
+                            horizontalAlignment = Alignment.CenterHorizontally
                         ) {
 
                             Column(
@@ -212,10 +203,7 @@ fun CollectionDetailUI(
                                     }
                                 }
 
-                                fun openUrl(context: Context, url: String) {
-                                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                                    context.startActivity(intent)
-                                }
+
                                 Row(
                                     modifier = Modifier.padding(top = 8.dp),
                                     horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -230,9 +218,7 @@ fun CollectionDetailUI(
                                                     .size(32.dp)
                                                     .clickable {
                                                         it.url?.let { discordUrl ->
-                                                            openUrl(
-                                                                context, discordUrl
-                                                            )
+                                                            context.openChrome(discordUrl)
                                                         }
                                                     })
                                         }
@@ -244,9 +230,7 @@ fun CollectionDetailUI(
                                                     .size(32.dp)
                                                     .clickable {
                                                         it.url?.let { twitterUrl ->
-                                                            openUrl(
-                                                                context, twitterUrl
-                                                            )
+                                                            context.openChrome(twitterUrl)
                                                         }
                                                     })
                                         }
@@ -258,9 +242,7 @@ fun CollectionDetailUI(
                                                     .size(32.dp)
                                                     .clickable {
                                                         it.url?.let { webUrl ->
-                                                            openUrl(
-                                                                context, webUrl
-                                                            )
+                                                            context.openChrome(webUrl)
                                                         }
                                                     })
                                         }
@@ -367,9 +349,15 @@ fun CollectionDetailUI(
             }
         }
         if (showButton) {
-            ListResetButton {
-                scope.launch {
-                    listState.animateScrollToItem(0)
+            Box(
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(bottom = 100.dp)
+            ) {
+                ListResetButton {
+                    scope.launch {
+                        listState.animateScrollToItem(0)
+                    }
                 }
             }
         }
@@ -386,6 +374,7 @@ fun CollectionDetailUI(
             tint = textColor)
     }
 }
+
 
 @Composable
 fun AssetsItem(assetsDataItem: AssetsDataItem, onItemClick: () -> Unit) {
