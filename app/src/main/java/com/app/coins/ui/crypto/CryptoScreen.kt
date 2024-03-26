@@ -1,6 +1,5 @@
 package com.app.coins.ui.crypto
 
-import android.content.res.Configuration.ORIENTATION_LANDSCAPE
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -16,7 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -33,7 +31,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -65,12 +62,6 @@ fun CryptoScreen(
     val coinsPagingItems: LazyPagingItems<CryptoUIModel> =
         viewModel.coinsState.collectAsLazyPagingItems()
 
-    var queryText by rememberSaveable {
-        mutableStateOf("")
-    }
-    val cellConfiguration = if (LocalConfiguration.current.orientation == ORIENTATION_LANDSCAPE) {
-        StaggeredGridCells.Adaptive(minSize = 175.dp)
-    } else StaggeredGridCells.Fixed(2)
 
     val listState = rememberLazyListState()
     val scope = rememberCoroutineScope()
@@ -154,8 +145,6 @@ fun CryptoScreen(
 
                 loadState.append is LoadState.Error -> {
                     val error = coinsPagingItems.loadState.append as LoadState.Error
-
-                    // handle error
 
                 }
             }
