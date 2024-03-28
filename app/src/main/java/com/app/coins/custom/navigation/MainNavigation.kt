@@ -19,7 +19,7 @@ fun MainNavigation(
     NavHost(
         navController = navController,
         startDestination = ScreenRoutes.CRYPTO_HOST_ROUTE,
-        modifier = Modifier,
+        modifier = modifier,
 
         ) {
         cryptoGraph(navController, shouldBottomBarVisible = {})

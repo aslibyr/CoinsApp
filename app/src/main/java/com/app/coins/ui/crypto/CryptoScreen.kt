@@ -115,7 +115,6 @@ fun CryptoScreen(
             Box(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
-                    .padding(bottom = 100.dp)
             ) {
                 ListResetButton {
                     scope.launch {

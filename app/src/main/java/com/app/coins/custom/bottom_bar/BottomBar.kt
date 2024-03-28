@@ -5,7 +5,6 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.Newspaper
@@ -80,8 +79,6 @@ fun BottomBar(
     Column(modifier = Modifier.fillMaxWidth()) {
         NavigationBar(
             modifier = Modifier.graphicsLayer {
-                clip = true
-                shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp)
                 shadowElevation = 5f
             },
             containerColor = primaryBackgroundColor

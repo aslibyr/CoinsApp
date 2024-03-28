@@ -31,7 +31,7 @@ fun BoxScope.ListResetButton(
         modifier = Modifier
             .width(60.dp)
             .height(60.dp)
-            .padding(end = 16.dp)
+            .padding(end = 16.dp, bottom = 8.dp)
             .align(Alignment.CenterEnd)
             .fillMaxSize()
             .clickable {
